@@ -1,0 +1,37 @@
+<ion-header>
+  <ion-navbar>
+    <button ion-button menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </button>
+    <ion-title>Roll Dice</ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content padding>
+  <div id="resultSection">
+    <ion-scroll float-left scrollY="true">
+        <p *ngFor="let result of results">{{result}}</p>
+    </ion-scroll>
+    <p id="recentResult" no-margin text-center>{{recentResult}}</p>
+  </div>
+
+  <p>Select a die type to roll:</p>
+  <ion-select padding-vertical class="fullWidth" [(ngModel)]="dieSize">
+    <ion-option value="2">Coin</ion-option>
+    <ion-option value="4">d4</ion-option>
+    <ion-option value="6">d6</ion-option>
+    <ion-option value="8">d8</ion-option>
+    <ion-option value="12">d12</ion-option>
+    <ion-option value="20">d20</ion-option>
+    <ion-option value="100">d100</ion-option>
+  </ion-select>
+
+  <button 
+      id="rollButton"
+      class="fullWidth"
+      ion-button
+      full primary
+      (click)="roll()">
+      Roll!
+  </button>
+</ion-content>
