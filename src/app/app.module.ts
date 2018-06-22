@@ -6,6 +6,8 @@ import { MyApp } from './app.component';
 import { HomePage } from '../pages/home/home';
 import { ListPage } from '../pages/list/list';
 import { DicePage } from '../pages/dice/dice';
+import { CombatPage } from '../pages/combat/combat';
+import { OrderEntryModal } from '../pages/combat/order-entry/order-entry';
 
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
@@ -15,7 +17,9 @@ import { SplashScreen } from '@ionic-native/splash-screen';
     MyApp,
     HomePage,
     ListPage,
-    DicePage
+    DicePage,
+    CombatPage,
+    OrderEntryModal
   ],
   imports: [
     BrowserModule,
@@ -26,7 +30,9 @@ import { SplashScreen } from '@ionic-native/splash-screen';
     MyApp,
     HomePage,
     ListPage,
-    DicePage
+    DicePage,
+    CombatPage,
+    OrderEntryModal
   ],
   providers: [
     StatusBar,

@@ -1,0 +1,18 @@
+<ion-header>
+  <ion-navbar>
+    <button ion-button menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </button>
+    <ion-title>Combat</ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content padding>
+  <ion-list>
+    <ion-item *ngFor="let combatant of combatants">
+      {{combatant.name}}
+      <ion-badge item-end color="secondary">{{combatant.initiative}}</ion-badge>
+    </ion-item>
+  </ion-list>
+  <button ion-button secondary (click)="presentOrderEntryModal()">Add Combatant</button>
+</ion-content>
