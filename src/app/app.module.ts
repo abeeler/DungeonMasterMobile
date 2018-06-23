@@ -7,11 +7,14 @@ import { HomePage } from '../pages/home/home';
 import { ListPage } from '../pages/list/list';
 import { DicePage } from '../pages/dice/dice';
 import { CombatPage } from '../pages/combat/combat';
-import { OrderEntryModal } from '../pages/combat/order-entry/order-entry';
+
+import { OrderEntryModal } from '../pages/combat/modals/order-entry/order-entry';
+import { HealthEditModal } from '../pages/combat/modals/health-edit/health-edit';
+
+import { CombatantGroupComponent } from '../pages/combat/components/combatant-group';
 
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
-import { HealthEditModal } from '../pages/combat/health-edit/health-edit';
 
 @NgModule({
   declarations: [
@@ -21,7 +24,8 @@ import { HealthEditModal } from '../pages/combat/health-edit/health-edit';
     DicePage,
     CombatPage,
     OrderEntryModal,
-    HealthEditModal
+    HealthEditModal,
+    CombatantGroupComponent
   ],
   imports: [
     BrowserModule,

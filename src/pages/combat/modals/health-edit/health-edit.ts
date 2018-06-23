@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { ViewController, NavParams } from 'ionic-angular';
-import { Health, CombatPage } from '../combat';
+import { Health, CombatPage } from '../../combat';
 
 @Component({
   selector: 'modal-health-edit',

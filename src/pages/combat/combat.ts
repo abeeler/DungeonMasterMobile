@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { ModalController, NavController } from 'ionic-angular';
-import { OrderEntryModal } from './order-entry/order-entry';
-import { HealthEditModal } from './health-edit/health-edit';
+import { OrderEntryModal } from './modals/order-entry/order-entry';
+import { HealthEditModal } from './modals/health-edit/health-edit';
 
 @Component({
   selector: 'page-combat',
@@ -10,12 +10,14 @@ import { HealthEditModal } from './health-edit/health-edit';
 export class CombatPage {
   static readonly HEALTH_PARAMETER = 'health';
 
-  combatants : Combatant[];
-  activeIndex : number;
+  groups : CombatantGroup[];
+  groupIndex : number;
+  memberIndex : number;
 
   constructor(public navCtrl: NavController, public modalCtrl: ModalController) {
-    this.combatants = [];
-    this.activeIndex = 0;
+    this.groups = [];
+    this.groupIndex = 0;
+    this.memberIndex = 0;
 
     this.insertEntry = this.insertEntry.bind(this);
   }
@@ -28,27 +30,35 @@ export class CombatPage {
     });
   }
 
-  insertEntry(combatant : Combatant) {
-    // If no combatants, push immediately
-    if (this.combatants.length == 0) {
-      this.combatants.push(combatant);
-    } else {
-      // Otherwise loop over each combatant to find sorted position
-      for (var index = 0; index < this.combatants.length; index++) {
-        if (this.combatants[index].initiative < combatant.initiative) {
-          this.combatants.splice(index, 0, combatant);
-          return;
-        }
-      }
-      
-      // If no saved combatants had a lower initiative, add the new one to the end
-      this.combatants.push(combatant);
+  insertEntry(group : CombatantGroup) {
+    // If no saved groups, push immediately
+    if (this.groups.length == 0) {
+      this.groups.push(group);
+      return;
     }
+
+    // Otherwise loop over each group to find sorted initiative
+    for (var index = 0; index < this.groups.length; index++) {
+      if (this.groups[index].initiative < group.initiative) {
+        this.groups.splice(index, 0, group);
+        return;
+      }
+    }
+    
+    // If no saved groups had a lower initiative, add the new one to the end
+    this.groups.push(group);
   }
 
   nextCombatant() {
-    if (++this.activeIndex == this.combatants.length) {
-      this.activeIndex = 0;
+    if (this.groups.length === 0) {
+      return;
+    }
+
+    if (++this.memberIndex >= this.groups[this.groupIndex].members.length) {
+      this.memberIndex = 0;
+      if (++this.groupIndex >= this.groups.length) {
+        this.groupIndex = 0;
+      }
     }
   }
 
@@ -61,9 +71,14 @@ export class CombatPage {
   }
 }
 
-export interface Combatant {
+export interface CombatantGroup {
   name: string;
   initiative: number;
+  members: Combatant[];
+}
+
+export interface Combatant {
+  name: string;
   health: Health;
 }
 
@@ -72,7 +87,7 @@ export class Health {
   current: number;
 
   constructor(max: number) {
-    this.max = this.current = max;
+    this.max = this.current = Math.floor(max);
   }
 
   public change(delta : number) {
