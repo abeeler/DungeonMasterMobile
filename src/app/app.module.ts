@@ -11,6 +11,7 @@ import { OrderEntryModal } from '../pages/combat/order-entry/order-entry';
 
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
+import { HealthEditModal } from '../pages/combat/health-edit/health-edit';
 
 @NgModule({
   declarations: [
@@ -19,7 +20,8 @@ import { SplashScreen } from '@ionic-native/splash-screen';
     ListPage,
     DicePage,
     CombatPage,
-    OrderEntryModal
+    OrderEntryModal,
+    HealthEditModal
   ],
   imports: [
     BrowserModule,
@@ -32,7 +34,8 @@ import { SplashScreen } from '@ionic-native/splash-screen';
     ListPage,
     DicePage,
     CombatPage,
-    OrderEntryModal
+    OrderEntryModal,
+    HealthEditModal
   ],
   providers: [
     StatusBar,

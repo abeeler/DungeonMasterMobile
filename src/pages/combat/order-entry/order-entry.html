@@ -2,16 +2,24 @@
   <form (ngSubmit)="dismiss()">
     <ion-item>
       <ion-input name="name"
-          [(ngModel)]="combatant.name"
+          [(ngModel)]="name"
           placeholder="Name"
           autofocus></ion-input>
     </ion-item>
     <ion-item>
+      <ion-label>Initiative</ion-label>
       <ion-input name="initiative"
-          [(ngModel)]="combatant.initiative"
+          [(ngModel)]="initiative"
           type="number"
           placeholder="Initiative"></ion-input>
     </ion-item>
-    <button ion-button secondarytype="submit">Add to Combat</button>
+    <ion-item>
+      <ion-label>Max Health</ion-label>
+      <ion-input name="maxHealth"
+          [(ngModel)]="maxHealth"
+          type="number"
+          placeholder="Max Health"></ion-input>
+    </ion-item>
+    <button ion-button secondary type="submit">Add to Combat</button>
   </form>
 </ion-content>

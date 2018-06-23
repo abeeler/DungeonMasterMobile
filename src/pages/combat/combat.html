@@ -12,11 +12,14 @@
 
 <ion-content padding>
   <ion-list>
-    <ion-item *ngFor="let combatant of combatants; index as index"
+    <button ion-item
+        (click)="editHealth(combatant.health)"
+        *ngFor="let combatant of combatants; index as index"
         [ngClass]="{'selected': index === activeIndex}">
       {{combatant.name}}
+      <ion-badge margin-left color="danger">{{combatant.health.current}}/{{combatant.health.max}}</ion-badge>
       <ion-badge item-end color="secondary">{{combatant.initiative}}</ion-badge>
-    </ion-item>
+    </button>
   </ion-list>
 </ion-content>
 

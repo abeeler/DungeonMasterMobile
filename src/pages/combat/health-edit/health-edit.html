@@ -1,0 +1,10 @@
+<ion-content padding>
+  <h6 class="fullWidth" text-center>{{health.current}}/{{health.max}}</h6>
+  <button ion-button float-left color="danger" (click)="health.change(-1)">-1 HP</button>
+  <button ion-button float-right color="secondary" (click)="health.change(1)">+1 HP</button>
+  <button ion-button float-left color="danger" (click)="health.change(-5)">-5 HP</button>
+  <button ion-button float-right color="secondary" (click)="health.change(5)">+5 HP</button>
+  <button ion-button float-left color="danger" (click)="health.change(-10)">-10 HP</button>
+  <button ion-button float-right color="secondary" (click)="health.change(10)">+10 HP</button>
+  <button ion-button (click)="dismiss()">Done</button>
+</ion-content>

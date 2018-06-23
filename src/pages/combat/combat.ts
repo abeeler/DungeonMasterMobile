@@ -1,12 +1,15 @@
 import { Component } from '@angular/core';
 import { ModalController, NavController } from 'ionic-angular';
 import { OrderEntryModal } from './order-entry/order-entry';
+import { HealthEditModal } from './health-edit/health-edit';
 
 @Component({
   selector: 'page-combat',
   templateUrl: 'combat.html'
 })
 export class CombatPage {
+  static readonly HEALTH_PARAMETER = 'health';
+
   combatants : Combatant[];
   activeIndex : number;
 
@@ -48,9 +51,32 @@ export class CombatPage {
       this.activeIndex = 0;
     }
   }
+
+  editHealth(health : Health) {
+    let data = {};
+    data[CombatPage.HEALTH_PARAMETER] = health;
+
+    let healthModal = this.modalCtrl.create(HealthEditModal, data);
+    healthModal.present();
+  }
 }
 
 export interface Combatant {
   name: string;
   initiative: number;
+  health: Health;
+}
+
+export class Health {
+  max: number;
+  current: number;
+
+  constructor(max: number) {
+    this.max = this.current = max;
+  }
+
+  public change(delta : number) {
+    this.current += delta;
+    this.current = Math.min(Math.max(this.current, 0), this.max);
+  }
 }
