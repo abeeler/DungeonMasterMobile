@@ -4,15 +4,22 @@
       <ion-icon name="menu"></ion-icon>
     </button>
     <ion-title>Combat</ion-title>
+    <ion-buttons end>
+      <button ion-button (click)="presentOrderEntryModal()">Add</button>
+    </ion-buttons>
   </ion-navbar>
 </ion-header>
 
 <ion-content padding>
   <ion-list>
-    <ion-item *ngFor="let combatant of combatants">
+    <ion-item *ngFor="let combatant of combatants; index as index"
+        [ngClass]="{'selected': index === activeIndex}">
       {{combatant.name}}
       <ion-badge item-end color="secondary">{{combatant.initiative}}</ion-badge>
     </ion-item>
   </ion-list>
-  <button ion-button secondary (click)="presentOrderEntryModal()">Add Combatant</button>
 </ion-content>
+
+<ion-footer>
+    <button ion-button secondary full (click)="nextCombatant()" [disabled]="combatants.length < 2">Next Combatant</button>
+</ion-footer>

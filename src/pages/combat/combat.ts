@@ -8,9 +8,12 @@ import { OrderEntryModal } from './order-entry/order-entry';
 })
 export class CombatPage {
   combatants : Combatant[];
+  activeIndex : number;
 
   constructor(public navCtrl: NavController, public modalCtrl: ModalController) {
     this.combatants = [];
+    this.activeIndex = 0;
+
     this.insertEntry = this.insertEntry.bind(this);
   }
 
@@ -37,6 +40,12 @@ export class CombatPage {
       
       // If no saved combatants had a lower initiative, add the new one to the end
       this.combatants.push(combatant);
+    }
+  }
+
+  nextCombatant() {
+    if (++this.activeIndex == this.combatants.length) {
+      this.activeIndex = 0;
     }
   }
 }

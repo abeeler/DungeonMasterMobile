@@ -1,3 +1,10 @@
 page-combat {
+    ion-item.selected {
+        background-color: color($colors, primary);
+        color: white;
 
+        ion-badge {
+            color: white;
+        }
+    }
 }
