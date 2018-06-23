@@ -17,7 +17,9 @@ export class CombatPage {
   presentOrderEntryModal() {
     let entryModal = this.modalCtrl.create(OrderEntryModal);
     entryModal.onDidDismiss(this.insertEntry);
-    entryModal.present();
+    entryModal.present({
+      keyboardClose: false
+    });
   }
 
   insertEntry(combatant : Combatant) {

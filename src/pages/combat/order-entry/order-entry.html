@@ -1,14 +1,16 @@
 <ion-content padding>
   <form (ngSubmit)="dismiss()">
     <ion-item>
-      <ion-input name="name" [(ngModel)]="combatant.name" placeholder="Name"></ion-input>
+      <ion-input name="name"
+          [(ngModel)]="combatant.name"
+          placeholder="Name"
+          autofocus></ion-input>
     </ion-item>
     <ion-item>
       <ion-input name="initiative"
           [(ngModel)]="combatant.initiative"
           type="number"
-          placeholder="Initiative"
-          clearOnEdit></ion-input>
+          placeholder="Initiative"></ion-input>
     </ion-item>
     <button ion-button secondarytype="submit">Add to Combat</button>
   </form>
