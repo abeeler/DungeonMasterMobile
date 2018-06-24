@@ -1,5 +1,7 @@
 import { Component, Input } from '@angular/core';
-import { CombatantGroup } from '../combat';
+import { ModalController } from 'ionic-angular';
+import { CombatantGroup, Combatant, CombatPage } from '../combat';
+import { HealthEditModal } from '../modals/health-edit/health-edit';
 
 @Component({
     selector: 'combatant-group',
@@ -10,6 +12,9 @@ export class CombatantGroupComponent {
     @Input() active : boolean;
     @Input() memberIndex : number;
 
+    constructor(public modalCtrl : ModalController) { 
+    }
+
     get isIndividual() : boolean {
         return this.group.members.length === 1;
     }
@@ -19,5 +24,23 @@ export class CombatantGroupComponent {
             'selected': this.active && this.memberIndex === currentIndex,
             'group': !this.isIndividual
         }
+    }
+
+    editCombatant(combatant : Combatant) {
+        console.log("editting");
+
+        let originalName = combatant.name;
+        let originalHealth = combatant.health.current;
+
+        let data = {};
+        data[CombatPage.COMBATANT_PARAM] = combatant;
+        let editModal = this.modalCtrl.create(HealthEditModal, data);
+        editModal.onDidDismiss((data : Combatant) => {
+            if (!data) {
+                combatant.name = originalName;
+                combatant.health.current = originalHealth;
+            }
+        });
+        editModal.present();
     }
 }

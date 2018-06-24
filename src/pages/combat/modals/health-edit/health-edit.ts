@@ -1,21 +1,21 @@
 import { Component } from '@angular/core';
 import { ViewController, NavParams } from 'ionic-angular';
-import { Health, CombatPage } from '../../combat';
+import { Health, CombatPage, Combatant } from '../../combat';
 
 @Component({
   selector: 'modal-health-edit',
   templateUrl: 'health-edit.html'
 })
 export class HealthEditModal {
-  health: Health;
+  combatant : Combatant;
 
   constructor(
       public viewCtrl: ViewController,
       public params: NavParams) {
-    this.health = params.get(CombatPage.HEALTH_PARAMETER);
+    this.combatant = params.get(CombatPage.COMBATANT_PARAM);
   }
 
   dismiss() {
-    this.viewCtrl.dismiss(this.health);
+    this.viewCtrl.dismiss(this.combatant);
   }
 }

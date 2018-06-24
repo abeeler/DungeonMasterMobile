@@ -8,7 +8,7 @@ import { HealthEditModal } from './modals/health-edit/health-edit';
   templateUrl: 'combat.html'
 })
 export class CombatPage {
-  static readonly HEALTH_PARAMETER = 'health';
+  static readonly COMBATANT_PARAM = 'COMBATANT';
 
   groups : CombatantGroup[];
   groupIndex : number;
@@ -68,7 +68,7 @@ export class CombatPage {
 
   editHealth(health : Health) {
     let data = {};
-    data[CombatPage.HEALTH_PARAMETER] = health;
+    data[CombatPage.COMBATANT_PARAM] = health;
 
     let healthModal = this.modalCtrl.create(HealthEditModal, data);
     healthModal.present();

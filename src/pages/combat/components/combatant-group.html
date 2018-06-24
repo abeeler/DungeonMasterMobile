@@ -5,7 +5,8 @@
 <button ion-item 
     [attr.padding-left]="isIndividual ? null : ''"
     *ngFor="let member of group.members; index as index"
-    [ngClass]="memberClasses(index)">
+    [ngClass]="memberClasses(index)"
+    (click)="editCombatant(member)">
   {{member.name}}
   <ion-badge margin-left color="danger">{{member.health.current}}/{{member.health.max}}</ion-badge>
   <ion-badge *ngIf="isIndividual" item-end color="secondary">{{group.initiative}}</ion-badge>
