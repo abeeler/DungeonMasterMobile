@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { Storage } from '@ionic/storage';
-import { ModalController, NavController } from 'ionic-angular';
+import { ModalController, NavController, AlertController } from 'ionic-angular';
 import { OrderEntryModal } from './modals/order-entry/order-entry';
 
 @Component({
@@ -18,6 +18,7 @@ export class CombatPage {
   constructor(
       public navCtrl: NavController,
       public modalCtrl: ModalController,
+      public alertCtrl: AlertController,
       public storage: Storage) {
     this.groups = [];
     this.groupIndex = 0;
@@ -88,6 +89,26 @@ export class CombatPage {
         this.groupIndex = 0;
       }
     }
+  }
+
+  resetCombat() {
+    let confirmAlert = this.alertCtrl.create({
+      title: 'Confirm combat reset',
+      message: 'Remove all combatants from the current combat?',
+      buttons: [{
+        text: 'Cancel',
+        role: 'cancel'
+      }, {
+        text: 'Reset',
+        handler: () => {
+          this.groups = [];
+          this.groupIndex = 0;
+          this.memberIndex = 0;
+          this.storage.remove(CombatPage.STORED_GROUP);
+        }
+      }]
+    });
+    confirmAlert.present();
   }
 
   groupsUpdated() {
