@@ -29,8 +29,6 @@ export class CombatantGroupComponent {
     }
 
     editCombatant(combatant : Combatant) {
-        console.log("editting");
-
         let originalName = combatant.name;
         let originalHealth = combatant.health.current;
 
