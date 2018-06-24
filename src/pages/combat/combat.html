@@ -16,7 +16,8 @@
         *ngFor="let group of groups; index as index"
         [group]="group"
         [active]="index === groupIndex"
-        [memberIndex]="memberIndex">
+        [memberIndex]="memberIndex"
+        (updated)="groupsUpdated()">
     </combatant-group>
   </ion-item-group>
 </ion-content>

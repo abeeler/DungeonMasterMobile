@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
+import { Storage } from '@ionic/storage';
 import { ModalController, NavController } from 'ionic-angular';
 import { OrderEntryModal } from './modals/order-entry/order-entry';
-import { HealthEditModal } from './modals/health-edit/health-edit';
 
 @Component({
   selector: 'page-combat',
@@ -9,17 +9,35 @@ import { HealthEditModal } from './modals/health-edit/health-edit';
 })
 export class CombatPage {
   static readonly COMBATANT_PARAM = 'COMBATANT';
+  static readonly STORED_GROUP = 'combat.stored_group';
 
   groups : CombatantGroup[];
   groupIndex : number;
   memberIndex : number;
 
-  constructor(public navCtrl: NavController, public modalCtrl: ModalController) {
+  constructor(
+      public navCtrl: NavController,
+      public modalCtrl: ModalController,
+      public storage: Storage) {
     this.groups = [];
     this.groupIndex = 0;
     this.memberIndex = 0;
 
     this.insertEntry = this.insertEntry.bind(this);
+
+    storage.get(CombatPage.STORED_GROUP).then((groups : CombatantGroup[]) => {
+      if (groups) {
+        this.groups = groups;
+        for(let group of groups) {
+          for (let member of group.members) {
+            let health = member.health;
+            let current = health.current;
+            member.health = new Health(health.max);
+            member.health.current = current;
+          }
+        }
+      }
+    });
   }
 
   presentOrderEntryModal() {
@@ -42,15 +60,21 @@ export class CombatPage {
     }
 
     // Otherwise loop over each group to find sorted initiative
+    let inserted = false;
     for (var index = 0; index < this.groups.length; index++) {
       if (this.groups[index].initiative < group.initiative) {
         this.groups.splice(index, 0, group);
-        return;
+        inserted = true;
+        break;
       }
     }
     
     // If no saved groups had a lower initiative, add the new one to the end
-    this.groups.push(group);
+    if (!inserted) {
+      this.groups.push(group);
+    }
+
+    this.groupsUpdated();
   }
 
   nextCombatant() {
@@ -66,12 +90,8 @@ export class CombatPage {
     }
   }
 
-  editHealth(health : Health) {
-    let data = {};
-    data[CombatPage.COMBATANT_PARAM] = health;
-
-    let healthModal = this.modalCtrl.create(HealthEditModal, data);
-    healthModal.present();
+  groupsUpdated() {
+    this.storage.set(CombatPage.STORED_GROUP, this.groups);
   }
 }
 

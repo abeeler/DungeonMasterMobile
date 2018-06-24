@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { ModalController } from 'ionic-angular';
 import { CombatantGroup, Combatant, CombatPage } from '../combat';
 import { HealthEditModal } from '../modals/health-edit/health-edit';
@@ -11,6 +11,8 @@ export class CombatantGroupComponent {
     @Input() group : CombatantGroup;
     @Input() active : boolean;
     @Input() memberIndex : number;
+
+    @Output() updated = new EventEmitter<any>();
 
     constructor(public modalCtrl : ModalController) { 
     }
@@ -39,6 +41,8 @@ export class CombatantGroupComponent {
             if (!data) {
                 combatant.name = originalName;
                 combatant.health.current = originalHealth;
+            } else {
+                this.updated.emit();
             }
         });
         editModal.present();
