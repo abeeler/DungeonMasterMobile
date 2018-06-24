@@ -31,6 +31,10 @@ export class CombatPage {
   }
 
   insertEntry(group : CombatantGroup) {
+    if (!group) {
+      return;
+    }
+    
     // If no saved groups, push immediately
     if (this.groups.length == 0) {
       this.groups.push(group);
