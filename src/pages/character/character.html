@@ -1,0 +1,54 @@
+<ion-header>
+  <ion-navbar>
+    <button ion-button menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </button>
+    <ion-title>{{character.name}}</ion-title>
+  </ion-navbar>
+  <ion-segment [(ngModel)]="section">
+    <ion-segment-button value="stats">Stats</ion-segment-button>
+    <ion-segment-button value="combat">Combat</ion-segment-button>
+    <ion-segment-button value="proficiencies">Proficiencies</ion-segment-button>
+  </ion-segment>
+</ion-header>
+
+<ion-content padding>
+  <div [ngSwitch]="section">
+    <ion-list *ngSwitchCase="'stats'">
+      <ion-item *ngFor="let index of [0,1,2,3,4,5]"
+          [ngClass]="savingThrowClass(index)">
+        {{statisticStrings[index]}}
+        <span item-end>{{character.statistics[index]}} ({{character.getModifier(index)}})</span>
+      </ion-item>
+      <ion-item margin-top>
+        Passive Perception
+        <span item-end>{{passivePerception}}</span>
+      </ion-item>
+    </ion-list>
+
+    <ion-list *ngSwitchCase="'combat'">
+      <ion-item>
+        Health
+        <span item-end class="health">{{character.health.current}}/{{character.health.max}}</span>
+      </ion-item>
+      <ion-item>
+        <span margin-left>Hit Die (1d{{character.hitDie}} + {{hitDieBonus}})</span>
+        <span item-end>{{character.currentHitDie}}/{{character.maxHitDie}}</span>
+      </ion-item>
+      <ion-item>
+        Initiative Bonus
+        <span item-end>{{initiative}}</span>
+      </ion-item>
+      <ion-item>
+        Armor Class
+        <span item-end>{{character.armorClass}}</span>
+      </ion-item>
+    </ion-list>
+
+    <ion-list *ngSwitchCase="'proficiencies'">
+      <ion-item *ngFor="let proficiency of character.proficiencies">
+        {{proficiencyNames[proficiency]}}
+      </ion-item>
+    </ion-list>
+  </div>
+</ion-content>

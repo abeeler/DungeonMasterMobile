@@ -1,0 +1,9 @@
+page-character {
+    .saving-throw {
+        color: color($colors, secondary);
+    }
+
+    .health {
+        color: color($colors, danger);
+    }
+}
