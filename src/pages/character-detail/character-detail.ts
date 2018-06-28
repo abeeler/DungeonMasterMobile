@@ -6,7 +6,7 @@ import { Health } from '../combat/combat';
   selector: 'page-character',
   templateUrl: 'character.html'
 })
-export class CharacterPage {
+export class CharacterDetailPage {
   section: string;
   character : Character;
 
