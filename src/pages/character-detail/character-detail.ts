@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
-import { NavController } from 'ionic-angular';
+import { NavController, NavParams } from 'ionic-angular';
 import { Health } from '../combat/combat';
+import { CharacterListPage } from '../character-list/character-list';
 
 @Component({
   selector: 'page-character-detail',
@@ -10,18 +11,9 @@ export class CharacterDetailPage {
   section: string;
   character : Character;
 
-  constructor(public navCtrl: NavController) {
+  constructor(public navCtrl: NavController, public navParams : NavParams) {
     this.section = 'stats';
-    this.character = new Character({
-      name: "Johnson Jacobs",
-      statistics: [6, 10, 14, 15, 9, 8],
-      savingThrows: [2, 5],
-      health: new Health(15),
-      currentHitDie: 1,
-      maxHitDie: 1,
-      armorClass: 11,
-      proficiencies: [2, 4, 8]
-    });
+    this.character = navParams.get(CharacterListPage.CHARACTER_PARAM);
   }
 
   get statisticStrings() : string[] {

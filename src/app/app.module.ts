@@ -16,6 +16,7 @@ import { CombatantGroupComponent } from '../pages/combat/components/combatant-gr
 
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
+import { CharacterListPage } from '../pages/character-list/character-list';
 import { CharacterDetailPage } from '../pages/character-detail/character-detail';
 
 @NgModule({
@@ -26,6 +27,7 @@ import { CharacterDetailPage } from '../pages/character-detail/character-detail'
     DicePage,
     CombatPage,
     CharacterDetailPage,
+    CharacterListPage,
     OrderEntryModal,
     HealthEditModal,
     CombatantGroupComponent
@@ -43,6 +45,7 @@ import { CharacterDetailPage } from '../pages/character-detail/character-detail'
     DicePage,
     CombatPage,
     CharacterDetailPage,
+    CharacterListPage,
     OrderEntryModal,
     HealthEditModal
   ],
