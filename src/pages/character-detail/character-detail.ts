@@ -3,8 +3,8 @@ import { NavController } from 'ionic-angular';
 import { Health } from '../combat/combat';
 
 @Component({
-  selector: 'page-character',
-  templateUrl: 'character.html'
+  selector: 'page-character-detail',
+  templateUrl: 'character-detail.html'
 })
 export class CharacterDetailPage {
   section: string;
