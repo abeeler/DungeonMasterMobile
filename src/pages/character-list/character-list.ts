@@ -14,10 +14,12 @@ export class CharacterListPage {
   static readonly STORED_CHARACTERS = 'characters';
   static readonly CHARACTER_PARAM = 'character';
 
+  filter: string;
   loaded: boolean;
   characters: Character[];
 
   constructor(public storage: Storage, public navCtrl: NavController, public modalCtrl: ModalController) {
+    this.filter = 'all';
     this.loaded = false;
     this.characters = [];
     storage.get(CharacterListPage.STORED_CHARACTERS).then((characters: Character[]) => {
@@ -39,6 +41,12 @@ export class CharacterListPage {
         }));
       }
     });
+  }
+
+  get filteredCharacters() {
+    return this.filter == 'all' ?
+        this.characters :
+        this.characters.filter((character: Character) => character.isPlayerCharacter);
   }
 
   presentCharacterEntryModal() {
@@ -67,5 +75,5 @@ export class CharacterListPage {
     } else {
       this.storage.set(CharacterListPage.STORED_CHARACTERS, this.characters);
     }
-}
+  }
 }

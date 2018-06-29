@@ -5,11 +5,15 @@
     </button>
     <ion-title>Characters</ion-title>
   </ion-navbar>
+  <ion-segment [(ngModel)]="filter">
+    <ion-segment-button value="all">All</ion-segment-button>
+    <ion-segment-button value="pcOnly">Players</ion-segment-button>
+  </ion-segment>
 </ion-header>
 
 <ion-content>
   <ion-list>
-    <button ion-item *ngFor="let character of characters" (click)="showCharacter($event, character)">
+    <button ion-item *ngFor="let character of filteredCharacters" (click)="showCharacter($event, character)">
       {{character.name}}
     </button>
   </ion-list>
