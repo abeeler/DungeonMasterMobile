@@ -13,6 +13,12 @@
 </ion-header>
 
 <ion-content padding>
+  <ion-fab right bottom>
+    <button ion-fab color="primary" (click)="presentCharacterEntryModal()">
+      <ion-icon name="create"></ion-icon>
+    </button>
+  </ion-fab>
+
   <div [ngSwitch]="section">
     <ion-list *ngSwitchCase="'stats'">
       <ion-item *ngFor="let index of [0,1,2,3,4,5]"

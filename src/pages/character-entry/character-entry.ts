@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
-import { ViewController, AlertController } from 'ionic-angular';
+import { ViewController, AlertController, NavParams } from 'ionic-angular';
 import { Character } from '../character-detail/character-detail';
+import { CharacterListPage } from '../character-list/character-list';
 
 @Component({
   selector: 'modal-character-entry',
@@ -9,11 +10,12 @@ import { Character } from '../character-detail/character-detail';
 export class CharacterEntryModal {
   character: Character;
 
-  constructor(public viewCtrl: ViewController, public alertCtrl: AlertController) {
-    this.character = new Character();
+  constructor(public params: NavParams, public viewCtrl: ViewController, public alertCtrl: AlertController) {
+    this.character = new Character(params.get(CharacterListPage.CHARACTER_PARAM));
   }
 
   dismiss() {
+    console.log("test")
     this.viewCtrl.dismiss(this.character);
   }
 
