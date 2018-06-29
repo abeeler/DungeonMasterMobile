@@ -41,6 +41,18 @@ export class Character implements Combatant {
     public getModifier?(statIndex: number): number {
       return Math.floor((this.statistics[statIndex] - 10) / 2);
     }
+
+    public get passivePerception(): number {
+      return 10 + this.getModifier(Character.WISDOM);
+    }
+  
+    public get initiative(): number {
+      return this.getModifier(Character.DEXTERITY);
+    }
+  
+    public get hitDieBonus(): number {
+      return this.getModifier(Character.CONSTITUTION);
+    }
   
     static readonly STRENGTH = 0;
     static readonly DEXTERITY = 1;

@@ -25,18 +25,6 @@ export class CharacterDetailPage {
     return Character.PROFICIENCIES;
   }
 
-  get passivePerception(): number {
-    return 10 + this.character.getModifier(Character.WISDOM);
-  }
-
-  get initiative(): number {
-    return this.character.getModifier(Character.DEXTERITY);
-  }
-
-  get hitDieBonus(): number {
-    return this.character.getModifier(Character.CONSTITUTION);
-  }
-
   savingThrowClass(index: number) {
     return { 'saving-throw': this.character.savingThrows.indexOf(index) >= 0 };
   }

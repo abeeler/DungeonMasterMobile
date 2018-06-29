@@ -28,7 +28,7 @@
       </ion-item>
       <ion-item margin-top>
         Passive Perception
-        <span item-end>{{passivePerception}}</span>
+        <span item-end>{{character.passivePerception}}</span>
       </ion-item>
     </ion-list>
 
@@ -38,12 +38,12 @@
         <span item-end class="health">{{character.health.current}}/{{character.health.max}}</span>
       </ion-item>
       <ion-item>
-        <span margin-left>Hit Die (1d{{character.hitDie}} + {{hitDieBonus}})</span>
+        <span margin-left>Hit Die (1d{{character.hitDie}} + {{character.hitDieBonus}})</span>
         <span item-end>{{character.currentHitDie}}/{{character.maxHitDie}}</span>
       </ion-item>
       <ion-item>
         Initiative Bonus
-        <span item-end>{{initiative}}</span>
+        <span item-end>{{character.initiative}}</span>
       </ion-item>
       <ion-item>
         Armor Class
