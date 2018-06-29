@@ -1,13 +1,14 @@
 import { Component } from '@angular/core';
 import { ViewController, NavParams } from 'ionic-angular';
-import { Health, CombatPage, Combatant } from '../../combat';
+import { CombatPage } from '../../combat';
+import { Combatant } from '../../../../classes/combat';
 
 @Component({
   selector: 'modal-health-edit',
   templateUrl: 'health-edit.html'
 })
 export class HealthEditModal {
-  combatant : Combatant;
+  combatant: Combatant;
 
   constructor(
       public viewCtrl: ViewController,

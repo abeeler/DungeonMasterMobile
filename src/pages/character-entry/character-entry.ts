@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { ViewController, AlertController, NavParams } from 'ionic-angular';
-import { Character } from '../character-detail/character-detail';
 import { CharacterListPage } from '../character-list/character-list';
+import { Character } from '../../classes/character';
 
 @Component({
   selector: 'modal-character-entry',
@@ -18,15 +18,15 @@ export class CharacterEntryModal {
     this.viewCtrl.dismiss(this.character);
   }
 
-  get statisticStrings() : string[] {
+  get statisticStrings(): string[] {
     return Character.STATISTICS;
   }
 
-  get proficiencyNames() : string[] {
+  get proficiencyNames(): string[] {
     return Character.PROFICIENCIES;
   }
 
-  get inactiveProficiencies() : number[] {
+  get inactiveProficiencies(): number[] {
     let inactiveProficiencies: number[] = [];
     for (let i = 0; i < Character.PROFICIENCIES.length; i++) {
       if (this.character.proficiencies.indexOf(i) < 0) {

@@ -2,17 +2,17 @@ import { Health, Combatant } from "./combat";
 
 export class Character implements Combatant {
     public name: string;
-    public statistics? : number[];
-    public savingThrows? : number[];
-    public health : Health;
-    public hitDie? : number;
-    public currentHitDie? : number;
-    public maxHitDie? : number;
-    public speed? : number;
-    public armorClass? : number;
-    public proficiencies? : number[];
+    public statistics?: number[];
+    public savingThrows?: number[];
+    public health: Health;
+    public hitDie?: number;
+    public currentHitDie?: number;
+    public maxHitDie?: number;
+    public speed?: number;
+    public armorClass?: number;
+    public proficiencies?: number[];
   
-    public constructor(character : Character = {} as Character) {
+    public constructor(character: Character = {} as Character) {
       let {
         name = "Default Name",
         statistics = [10, 10, 10, 10, 10, 10],
@@ -38,7 +38,7 @@ export class Character implements Combatant {
       this.proficiencies = proficiencies;
     }
   
-    public getModifier?(statIndex : number) : number {
+    public getModifier?(statIndex: number): number {
       return Math.floor((this.statistics[statIndex] - 10) / 2);
     }
   
@@ -49,7 +49,7 @@ export class Character implements Combatant {
     static readonly WISDOM = 4;
     static readonly CHARISMA = 5;
   
-    static readonly STATISTICS : string[] = [
+    static readonly STATISTICS: string[] = [
       'Strength',
       'Dexterity',
       'Constitution',
@@ -58,9 +58,9 @@ export class Character implements Combatant {
       'Charisma'
     ];
   
-    static readonly STATS : string[] = Character.STATISTICS.map(stat => stat.substr(0, 3).toLocaleUpperCase());
+    static readonly STATS: string[] = Character.STATISTICS.map(stat => stat.substr(0, 3).toLocaleUpperCase());
   
-    static readonly PROFICIENCIES : string[] = [
+    static readonly PROFICIENCIES: string[] = [
       'Acrobatics',
       'Animal Handling',
       'Arcana',

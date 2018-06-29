@@ -1,9 +1,10 @@
 import { Component } from '@angular/core';
 import { Storage } from '@ionic/storage';
 import { NavController, ModalController } from 'ionic-angular';
-import { Character, CharacterDetailPage } from '../character-detail/character-detail';
-import { Health } from '../combat/combat';
+import { CharacterDetailPage } from '../character-detail/character-detail';
 import { CharacterEntryModal } from '../character-entry/character-entry';
+import { Character } from '../../classes/character';
+import { Health } from '../../classes/combat';
 
 @Component({
   selector: 'page-character-list',
@@ -14,12 +15,12 @@ export class CharacterListPage {
   static readonly CHARACTER_PARAM = 'character';
 
   loaded: boolean;
-  characters : Character[];
+  characters: Character[];
 
   constructor(public storage: Storage, public navCtrl: NavController, public modalCtrl: ModalController) {
     this.loaded = false;
     this.characters = [];
-    storage.get(CharacterListPage.STORED_CHARACTERS).then((characters : Character[]) => {
+    storage.get(CharacterListPage.STORED_CHARACTERS).then((characters: Character[]) => {
       if (characters) {
         for(let character of characters) {
           this.characters.push(new Character(character));

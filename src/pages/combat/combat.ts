@@ -12,9 +12,9 @@ export class CombatPage {
   static readonly COMBATANT_PARAM = 'COMBATANT';
   static readonly STORED_GROUP = 'combat.stored_group';
 
-  groups : CombatantGroup[];
-  groupIndex : number;
-  memberIndex : number;
+  groups: CombatantGroup[];
+  groupIndex: number;
+  memberIndex: number;
 
   constructor(
       public navCtrl: NavController,
@@ -27,7 +27,7 @@ export class CombatPage {
 
     this.insertEntry = this.insertEntry.bind(this);
 
-    storage.get(CombatPage.STORED_GROUP).then((groups : CombatantGroup[]) => {
+    storage.get(CombatPage.STORED_GROUP).then((groups: CombatantGroup[]) => {
       if (groups) {
         this.groups = groups;
         for(let group of groups) {
@@ -50,7 +50,7 @@ export class CombatPage {
     });
   }
 
-  insertEntry(group : CombatantGroup) {
+  insertEntry(group: CombatantGroup) {
     if (!group) {
       return;
     }

@@ -6,7 +6,7 @@ export class Health {
     this.max = this.current = Math.floor(max);
   }   
 
-  public change(delta : number) {
+  public change(delta: number) {
     this.current += delta;
     this.current = Math.min(Math.max(this.current, 0), this.max);
   }

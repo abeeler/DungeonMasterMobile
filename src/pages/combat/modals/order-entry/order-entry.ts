@@ -1,17 +1,17 @@
 import { Component } from '@angular/core';
 import { ViewController } from 'ionic-angular';
-import { Health, CombatantGroup, Combatant } from '../../combat';
+import { Combatant, Health, CombatantGroup } from '../../../../classes/combat';
 
 @Component({
   selector: 'modal-order-entry',
   templateUrl: 'order-entry.html'
 })
 export class OrderEntryModal {
-  name : string;
-  initiative : number;
-  maxHealth : number;
-  isIndividual : boolean;
-  memberCount : number;
+  name: string;
+  initiative: number;
+  maxHealth: number;
+  isIndividual: boolean;
+  memberCount: number;
 
   constructor(public viewCtrl: ViewController) {
     this.name = '';
@@ -22,7 +22,7 @@ export class OrderEntryModal {
   }
 
   dismiss() {
-    let members : Combatant[] = [];
+    let members: Combatant[] = [];
     if (this.isIndividual) {
       members.push({
         name: this.name,
@@ -37,7 +37,7 @@ export class OrderEntryModal {
       }
     }
 
-    let newGroup : CombatantGroup = {
+    let newGroup: CombatantGroup = {
       name: this.name,
       initiative: Math.floor(this.initiative),
       members: members
