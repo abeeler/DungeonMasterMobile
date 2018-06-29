@@ -15,7 +15,6 @@ export class CharacterEntryModal {
   }
 
   dismiss() {
-    console.log("test")
     this.viewCtrl.dismiss(this.character);
   }
 
