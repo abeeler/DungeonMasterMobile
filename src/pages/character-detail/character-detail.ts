@@ -36,7 +36,10 @@ export class CharacterDetailPage {
     entryModal.onDidDismiss((data: Character) => {
       if (data) {
         for (const key in data) {
-          this.character[key] = data[key];
+          let descriptor = Object.getOwnPropertyDescriptor(this.character, key);
+          if (descriptor && descriptor.writable) {
+            this.character[key] = data[key];
+          }
         }
         this.character = data;
       }

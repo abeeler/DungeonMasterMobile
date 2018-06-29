@@ -4,6 +4,12 @@
       <ion-icon name="menu"></ion-icon>
     </button>
     <ion-title>{{character.name}}</ion-title>
+    <ion-buttons end>
+      <ion-icon *ngIf="character.isPlayerCharacter" 
+          name="contact"
+          color="primary" 
+          margin-right></ion-icon>
+    </ion-buttons>
   </ion-navbar>
   <ion-segment [(ngModel)]="section">
     <ion-segment-button value="stats">Stats</ion-segment-button>

@@ -3,8 +3,8 @@ import { Storage } from '@ionic/storage';
 import { NavController, ModalController } from 'ionic-angular';
 import { CharacterDetailPage } from '../character-detail/character-detail';
 import { CharacterEntryModal } from '../character-entry/character-entry';
-import { Character } from '../../classes/character';
 import { Health } from '../../classes/combat';
+import { Character } from '../../classes/character';
 
 @Component({
   selector: 'page-character-list',
@@ -34,7 +34,8 @@ export class CharacterListPage {
           currentHitDie: 1,
           maxHitDie: 1,
           armorClass: 11,
-          proficiencies: [2, 4, 8]
+          proficiencies: [2, 4, 8],
+          isPlayerCharacter: true
         }));
       }
     });

@@ -11,8 +11,9 @@ export class Character implements Combatant {
     public speed?: number;
     public armorClass?: number;
     public proficiencies?: number[];
+    public isPlayerCharacter?: boolean;
   
-    public constructor(character: Character = {} as Character) {
+    public constructor(character: any = {} as Character) {
       let {
         name = "Default Name",
         statistics = [10, 10, 10, 10, 10, 10],
@@ -23,7 +24,8 @@ export class Character implements Combatant {
         maxHitDie = 1,
         speed = 30,
         armorClass = 10,
-        proficiencies = []
+        proficiencies = [],
+        isPlayerCharacter = true
       } = character;
   
       this.name = name;
@@ -36,6 +38,7 @@ export class Character implements Combatant {
       this.speed = speed;
       this.armorClass = armorClass;
       this.proficiencies = proficiencies;
+      this.isPlayerCharacter = isPlayerCharacter;
     }
   
     public getModifier?(statIndex: number): number {
@@ -47,7 +50,7 @@ export class Character implements Combatant {
     }
 
     public get passivePerception(): number {
-      return 10 + this.getModifier(Character.WISDOM);
+      return this.getModifier(Character.WISDOM) + 10;
     }
   
     public get initiative(): number {
