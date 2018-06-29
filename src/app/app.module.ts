@@ -18,6 +18,7 @@ import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { CharacterListPage } from '../pages/character-list/character-list';
 import { CharacterDetailPage } from '../pages/character-detail/character-detail';
+import { CharacterEntryModal } from '../pages/character-entry/character-entry';
 
 @NgModule({
   declarations: [
@@ -28,6 +29,7 @@ import { CharacterDetailPage } from '../pages/character-detail/character-detail'
     CombatPage,
     CharacterDetailPage,
     CharacterListPage,
+    CharacterEntryModal,
     OrderEntryModal,
     HealthEditModal,
     CombatantGroupComponent
@@ -46,6 +48,7 @@ import { CharacterDetailPage } from '../pages/character-detail/character-detail'
     CombatPage,
     CharacterDetailPage,
     CharacterListPage,
+    CharacterEntryModal,
     OrderEntryModal,
     HealthEditModal
   ],

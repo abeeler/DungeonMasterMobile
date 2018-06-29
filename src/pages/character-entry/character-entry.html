@@ -1,0 +1,73 @@
+<ion-header>
+  <ion-navbar>
+    <ion-title>Character Entry</ion-title>
+    <ion-buttons end>
+      <button ion-button (click)="dismiss()">Done</button>
+    </ion-buttons>
+  </ion-navbar>
+</ion-header>
+
+<ion-content padding>
+  <form>
+    <ion-slides>
+      <ion-slide>
+        <ion-item>
+          <ion-label floating>Name</ion-label>
+          <ion-input name="name" clearInput [(ngModel)]="character.name"></ion-input>
+        </ion-item>
+
+        <h4>Statistics</h4>
+        <ion-item *ngFor="let index of [0,1,2,3,4,5]">
+          <ion-label>
+            {{statisticStrings[index]}}
+            <span *ngIf="character.savingThrows.indexOf(index) >= 0">(+)</span>
+          </ion-label>
+          <ion-input [name]="statisticStrings[index]" [(ngModel)]="character.statistics[index]" type="number"></ion-input>
+        </ion-item>
+        <button ion-button block margin-top (click)="presentSavingThrowList()">
+            Edit Saving Throws
+          </button>
+      </ion-slide>
+      <ion-slide>
+        <h4>Combat</h4>
+        <ion-item>
+          <ion-label>Current Health</ion-label>
+          <ion-input name="currentHealth" [(ngModel)]="character.health.current" type="number"></ion-input>
+        </ion-item>
+        <ion-item>
+          <ion-label>Max Health</ion-label>
+          <ion-input name="maxHealth" [(ngModel)]="character.health.max" type="number"></ion-input>
+        </ion-item>
+        <ion-item>
+          <ion-label>Hit Die Type</ion-label>
+          <ion-input name="hitDieType" [(ngModel)]="character.hitDie" type="number"></ion-input>
+        </ion-item>
+        <ion-item>
+          <ion-label>Current Hit Die</ion-label>
+          <ion-input name="currentHitDie" [(ngModel)]="character.currentHitDie" type="number"></ion-input>
+        </ion-item>
+        <ion-item>
+          <ion-label>Max Hit Die</ion-label>
+          <ion-input name="maxHitDie" [(ngModel)]="character.maxHitDie" type="number"></ion-input>
+        </ion-item>
+        <ion-item>
+          <ion-label>Armor Class</ion-label>
+          <ion-input name="armorClass" [(ngModel)]="character.armorClass" type="number"></ion-input>
+        </ion-item>
+      </ion-slide>
+      <ion-slide>
+        <h4>Skills</h4>
+        <ion-list>
+          <ion-list-header item-start>Proficient</ion-list-header>
+          <button ion-item *ngFor="let proficiency of character.proficiencies" (click)="removeSkill(proficiency)">
+            {{proficiencyNames[proficiency]}}
+          </button>
+          <ion-list-header item-start>Unproficient</ion-list-header>
+          <button ion-item *ngFor="let proficiency of inactiveProficiencies" (click)="addSkill(proficiency)">
+            {{proficiencyNames[proficiency]}}
+          </button>
+        </ion-list>
+      </ion-slide>
+    </ion-slides>
+  </form>
+</ion-content>
