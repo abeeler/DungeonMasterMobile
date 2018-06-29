@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { Storage } from '@ionic/storage';
 import { ModalController, NavController, AlertController } from 'ionic-angular';
 import { OrderEntryModal } from './modals/order-entry/order-entry';
+import { Health, CombatantGroup } from '../../classes/combat';
 
 @Component({
   selector: 'page-combat',
@@ -113,30 +114,5 @@ export class CombatPage {
 
   groupsUpdated() {
     this.storage.set(CombatPage.STORED_GROUP, this.groups);
-  }
-}
-
-export interface CombatantGroup {
-  name: string;
-  initiative: number;
-  members: Combatant[];
-}
-
-export interface Combatant {
-  name: string;
-  health: Health;
-}
-
-export class Health {
-  max: number;
-  current: number;
-
-  constructor(max: number) {
-    this.max = this.current = Math.floor(max);
-  }
-
-  public change(delta : number) {
-    this.current += delta;
-    this.current = Math.min(Math.max(this.current, 0), this.max);
   }
 }
