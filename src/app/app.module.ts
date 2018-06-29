@@ -5,7 +5,6 @@ import { IonicStorageModule } from '@ionic/storage';
 
 import { MyApp } from './app.component';
 import { HomePage } from '../pages/home/home';
-import { ListPage } from '../pages/list/list';
 import { DicePage } from '../pages/dice/dice';
 import { CombatPage } from '../pages/combat/combat';
 
@@ -24,7 +23,6 @@ import { CharacterEntryModal } from '../pages/character-entry/character-entry';
   declarations: [
     MyApp,
     HomePage,
-    ListPage,
     DicePage,
     CombatPage,
     CharacterDetailPage,
@@ -43,7 +41,6 @@ import { CharacterEntryModal } from '../pages/character-entry/character-entry';
   entryComponents: [
     MyApp,
     HomePage,
-    ListPage,
     DicePage,
     CombatPage,
     CharacterDetailPage,
