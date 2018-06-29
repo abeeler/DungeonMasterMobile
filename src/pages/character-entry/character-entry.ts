@@ -54,7 +54,7 @@ export class CharacterEntryModal {
         type: 'checkbox',
         label: statisticString,
         value: index.toString(),
-        checked: this.character.savingThrows.indexOf(index) >= 0
+        checked: this.character.hasSavingThrow(index)
       });
     });
 

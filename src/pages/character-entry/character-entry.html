@@ -20,7 +20,7 @@
         <ion-item *ngFor="let index of [0,1,2,3,4,5]">
           <ion-label>
             {{statisticStrings[index]}}
-            <span *ngIf="character.savingThrows.indexOf(index) >= 0">(+)</span>
+            <span *ngIf="character.hasSavingThrow(index)">(+)</span>
           </ion-label>
           <ion-input [name]="statisticStrings[index]" [(ngModel)]="character.statistics[index]" type="number"></ion-input>
         </ion-item>

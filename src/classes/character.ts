@@ -42,6 +42,10 @@ export class Character implements Combatant {
       return Math.floor((this.statistics[statIndex] - 10) / 2);
     }
 
+    public hasSavingThrow?(statIndex: number): boolean {
+      return this.savingThrows.indexOf(statIndex) >= 0;
+    }
+
     public get passivePerception(): number {
       return 10 + this.getModifier(Character.WISDOM);
     }

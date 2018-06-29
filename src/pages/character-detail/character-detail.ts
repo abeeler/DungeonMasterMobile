@@ -26,7 +26,7 @@ export class CharacterDetailPage {
   }
 
   savingThrowClass(index: number) {
-    return { 'saving-throw': this.character.savingThrows.indexOf(index) >= 0 };
+    return { 'saving-throw': this.character.hasSavingThrow(index) };
   }
 
   presentCharacterEntryModal() {
