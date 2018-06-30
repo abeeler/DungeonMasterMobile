@@ -41,6 +41,11 @@ export class PartyPage {
     this.navCtrl.push(CharacterDetailPage, data);
   }
 
+  removeMember(index) {
+    this.members.splice(index, 1);
+    this.saveParty();
+  }
+
   saveParty() {
     this.storage.set(PartyPage.STORED_MEMBERS, this.members);
   }

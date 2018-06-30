@@ -9,11 +9,16 @@
 
 <ion-content padding>
   <ion-list>
-    <ion-list>
-      <button ion-item *ngFor="let character of members" (click)="clickCharacter($event, character)">
+    <ion-item-sliding *ngFor="let character of members; index as index">
+      <button ion-item (click)="clickCharacter($event, character)">
         {{character.name}}
       </button>
-    </ion-list>
+      <ion-item-options side="left">
+        <button color="danger" ion-button icon-only (click)="removeMember(index)">
+          <ion-icon name="trash"></ion-icon>
+        </button>
+      </ion-item-options>
+    </ion-item-sliding>
   </ion-list>
 
   <ion-fab right bottom>
