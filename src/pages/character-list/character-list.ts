@@ -13,6 +13,7 @@ import { Character } from '../../classes/character';
 export class CharacterListPage {
   static readonly STORED_CHARACTERS = 'characters';
   static readonly CHARACTER_PARAM = 'character';
+  static readonly CALLBACK_PARAM = 'callback';
 
   callback: (Character) => void;
   filter: string;
@@ -24,7 +25,7 @@ export class CharacterListPage {
       public params: NavParams,
       public navCtrl: NavController,
       public modalCtrl: ModalController) {
-    this.callback = params.get('callback');
+    this.callback = params.get(CharacterListPage.CALLBACK_PARAM);
     this.filter = 'all';
     this.loaded = false;
     this.characters = [];
