@@ -13,7 +13,7 @@
 
 <ion-content>
   <ion-list>
-    <button ion-item *ngFor="let character of filteredCharacters" (click)="showCharacter($event, character)">
+    <button ion-item *ngFor="let character of filteredCharacters" (click)="clickCharacter($event, character)">
       {{character.name}}
     </button>
   </ion-list>

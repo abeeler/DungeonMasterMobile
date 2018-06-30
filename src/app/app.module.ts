@@ -18,6 +18,7 @@ import { SplashScreen } from '@ionic-native/splash-screen';
 import { CharacterListPage } from '../pages/character-list/character-list';
 import { CharacterDetailPage } from '../pages/character-detail/character-detail';
 import { CharacterEntryModal } from '../pages/character-entry/character-entry';
+import { PartyPage } from '../pages/party/party';
 
 @NgModule({
   declarations: [
@@ -30,7 +31,8 @@ import { CharacterEntryModal } from '../pages/character-entry/character-entry';
     CharacterEntryModal,
     OrderEntryModal,
     HealthEditModal,
-    CombatantGroupComponent
+    CombatantGroupComponent,
+    PartyPage
   ],
   imports: [
     BrowserModule,
@@ -45,6 +47,7 @@ import { CharacterEntryModal } from '../pages/character-entry/character-entry';
     CombatPage,
     CharacterDetailPage,
     CharacterListPage,
+    PartyPage,
     CharacterEntryModal,
     OrderEntryModal,
     HealthEditModal
