@@ -1,10 +1,10 @@
 import { Component } from '@angular/core';
-import { Storage } from '@ionic/storage';
 import { NavController, ModalController, NavParams } from 'ionic-angular';
 import { CharacterDetailPage } from '../character-detail/character-detail';
 import { CharacterEntryModal } from '../character-entry/character-entry';
-import { Health } from '../../classes/combat';
-import { Character } from '../../classes/character';
+import { Character, SimpleCharacter } from '../../classes/character';
+import { SQLite } from '@ionic-native/sqlite';
+import { CharacterQueries } from '../../classes/character-sql';
 
 @Component({
   selector: 'page-character-list',
@@ -18,42 +18,25 @@ export class CharacterListPage {
   callback: (Character) => void;
   filter: string;
   loaded: boolean;
-  characters: Character[];
+  characters: SimpleCharacter[];
 
   constructor(
-      public storage: Storage,
+      private sqlite: SQLite,
       public params: NavParams,
       public navCtrl: NavController,
       public modalCtrl: ModalController) {
     this.callback = params.get(CharacterListPage.CALLBACK_PARAM);
     this.filter = 'all';
     this.loaded = false;
+
     this.characters = [];
-    storage.get(CharacterListPage.STORED_CHARACTERS).then((characters: Character[]) => {
-      if (characters) {
-        for(let character of characters) {
-          this.characters.push(new Character(character));
-        }
-      } else {
-        this.characters.push(new Character({
-          name: "Johnson Jacobs",
-          statistics: [6, 10, 14, 15, 9, 8],
-          savingThrows: [2, 5],
-          health: new Health(15),
-          currentHitDie: 1,
-          maxHitDie: 1,
-          armorClass: 11,
-          proficiencies: [2, 4, 8],
-          isPlayerCharacter: true
-        }));
-      }
-    });
+    this.loadFromDatabase();
   }
 
   get filteredCharacters() {
     return this.filter == 'all' ?
         this.characters :
-        this.characters.filter((character: Character) => character.isPlayerCharacter);
+        this.characters.filter((character: SimpleCharacter) => character.characterType === 0);
   }
 
   presentCharacterEntryModal() {
@@ -61,7 +44,6 @@ export class CharacterListPage {
     entryModal.onDidDismiss((data: Character) => {
       if (data) {
         this.characters.push(data);
-        this.storage.set(CharacterListPage.STORED_CHARACTERS, this.characters);
       }
     });
 
@@ -70,9 +52,9 @@ export class CharacterListPage {
     });
   }
 
-  clickCharacter(event, character: Character) {
+  clickCharacter(event, character: SimpleCharacter) {
     if (this.callback) {
-      this.callback(character);
+      this.callback(character.id);
       this.navCtrl.pop();
     } else {
       let data = {};
@@ -81,11 +63,25 @@ export class CharacterListPage {
     }
   }
 
-  ionViewWillEnter() {
-    if (!this.loaded) {
-      this.loaded = true;
-    } else {
-      this.storage.set(CharacterListPage.STORED_CHARACTERS, this.characters);
-    }
+  loadFromDatabase() {
+    CharacterQueries.getDatabase(this.sqlite)
+      .then(db => {
+        db.executeSql(CharacterQueries.CREATE_CHARACTER_TABLE, {})
+          .then(() => db.executeSql(CharacterQueries.CREATE_STATISTIC_TABLE, {}))
+          .then(() => db.executeSql(CharacterQueries.CREATE_SAVING_THROW_TABLE, {}))
+          .then(() => db.executeSql(CharacterQueries.CREATE_SKILL_TABLE, {}))
+          .then(() => db.executeSql(CharacterQueries.CREATE_VARIABLE_TABLE, {}))
+          .then(() => db.executeSql(CharacterQueries.SELECT_ALL_NAMES, {}))
+          .then(res => {
+            for (let i = 0; i < res.rows.length; i++) {
+              let resultRow = res.rows.item(i);
+              this.characters.push(new SimpleCharacter(
+                resultRow.id,
+                resultRow.name,
+                resultRow.characterType
+              ));
+            }
+          }).catch(e => console.log(JSON.stringify(e)));
+      });
   }
 }

@@ -5,7 +5,7 @@
     </button>
     <ion-title>{{character.name}}</ion-title>
     <ion-buttons end>
-      <ion-icon *ngIf="character.isPlayerCharacter" 
+      <ion-icon 
           name="contact"
           color="primary" 
           margin-right></ion-icon>
@@ -14,7 +14,7 @@
   <ion-segment [(ngModel)]="section">
     <ion-segment-button value="stats">Stats</ion-segment-button>
     <ion-segment-button value="combat">Combat</ion-segment-button>
-    <ion-segment-button value="proficiencies">Proficiencies</ion-segment-button>
+    <ion-segment-button value="skills">Skills</ion-segment-button>
   </ion-segment>
 </ion-header>
 
@@ -40,12 +40,8 @@
 
     <ion-list *ngSwitchCase="'combat'">
       <ion-item>
-        Health
-        <span item-end class="health">{{character.health.current}}/{{character.health.max}}</span>
-      </ion-item>
-      <ion-item>
-        <span margin-left>Hit Die (1d{{character.hitDie}} + {{character.hitDieBonus}})</span>
-        <span item-end>{{character.currentHitDie}}/{{character.maxHitDie}}</span>
+        Max Health
+        <span item-end class="health">{{character.maxHealth}}</span>
       </ion-item>
       <ion-item>
         Initiative Bonus
@@ -57,9 +53,9 @@
       </ion-item>
     </ion-list>
 
-    <ion-list *ngSwitchCase="'proficiencies'">
-      <ion-item *ngFor="let proficiency of character.proficiencies">
-        {{proficiencyNames[proficiency]}}
+    <ion-list *ngSwitchCase="'skills'">
+      <ion-item *ngFor="let skill of character.skills">
+        {{skillNames[skill]}}
       </ion-item>
     </ion-list>
   </div>

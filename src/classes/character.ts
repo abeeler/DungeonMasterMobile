@@ -1,44 +1,43 @@
 import { Health, Combatant } from "./combat";
 
-export class Character implements Combatant {
-    public name: string;
+export class SimpleCharacter {
+  constructor(
+    public id: number,
+    public name: string,
+    public characterType: number
+  ) {}
+}
+
+export class Character extends SimpleCharacter {
     public statistics?: number[];
     public savingThrows?: number[];
-    public health: Health;
-    public hitDie?: number;
-    public currentHitDie?: number;
-    public maxHitDie?: number;
+    public maxHealth: number;
     public speed?: number;
     public armorClass?: number;
-    public proficiencies?: number[];
-    public isPlayerCharacter?: boolean;
+    public skills?: number[];
   
     public constructor(character: any = {} as Character) {
       let {
+        id = null,
         name = "Default Name",
         statistics = [10, 10, 10, 10, 10, 10],
         savingThrows = [],
-        health = new Health(10),
-        hitDie = 6,
-        currentHitDie = 1,
-        maxHitDie = 1,
+        maxHealth = 12,
         speed = 30,
         armorClass = 10,
         proficiencies = [],
-        isPlayerCharacter = true
+        characterType = 0
       } = character;
+
+      super(id, name, characterType);
   
       this.name = name;
       this.statistics = statistics;
       this.savingThrows = savingThrows;
-      this.health = health;
-      this.hitDie = hitDie;
-      this.currentHitDie = currentHitDie;
-      this.maxHitDie = maxHitDie;
+      this.maxHealth = maxHealth;
       this.speed = speed;
       this.armorClass = armorClass;
-      this.proficiencies = proficiencies;
-      this.isPlayerCharacter = isPlayerCharacter;
+      this.skills = proficiencies;
     }
   
     public getModifier?(statIndex: number): number {
@@ -79,7 +78,7 @@ export class Character implements Combatant {
   
     static readonly STATS: string[] = Character.STATISTICS.map(stat => stat.substr(0, 3).toLocaleUpperCase());
   
-    static readonly PROFICIENCIES: string[] = [
+    static readonly SKILLS: string[] = [
       'Acrobatics',
       'Animal Handling',
       'Arcana',

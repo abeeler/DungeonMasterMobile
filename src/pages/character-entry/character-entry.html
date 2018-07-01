@@ -15,10 +15,11 @@
           <ion-label floating>Name</ion-label>
           <ion-input name="name" clearInput [(ngModel)]="character.name"></ion-input>
         </ion-item>
-        <ion-item>
+
+        <!--ion-item>
           <ion-label>{{!character.isPlayerCharacter ? 'Non-' : ''}}Player Character</ion-label>
           <ion-toggle name="pc" [(ngModel)]="character.isPlayerCharacter"></ion-toggle>
-        </ion-item>
+        </ion-item-->
 
         <h4>Statistics</h4>
         <ion-item *ngFor="let index of [0,1,2,3,4,5]">
@@ -35,24 +36,8 @@
       <ion-slide>
         <h4>Combat</h4>
         <ion-item>
-          <ion-label>Current Health</ion-label>
-          <ion-input name="currentHealth" [(ngModel)]="character.health.current" type="number"></ion-input>
-        </ion-item>
-        <ion-item>
           <ion-label>Max Health</ion-label>
-          <ion-input name="maxHealth" [(ngModel)]="character.health.max" type="number"></ion-input>
-        </ion-item>
-        <ion-item>
-          <ion-label>Hit Die Type</ion-label>
-          <ion-input name="hitDieType" [(ngModel)]="character.hitDie" type="number"></ion-input>
-        </ion-item>
-        <ion-item>
-          <ion-label>Current Hit Die</ion-label>
-          <ion-input name="currentHitDie" [(ngModel)]="character.currentHitDie" type="number"></ion-input>
-        </ion-item>
-        <ion-item>
-          <ion-label>Max Hit Die</ion-label>
-          <ion-input name="maxHitDie" [(ngModel)]="character.maxHitDie" type="number"></ion-input>
+          <ion-input name="maxHealth" [(ngModel)]="character.maxHealth" type="number"></ion-input>
         </ion-item>
         <ion-item>
           <ion-label>Armor Class</ion-label>
@@ -63,12 +48,12 @@
         <h4>Skills</h4>
         <ion-list>
           <ion-list-header item-start>Proficient</ion-list-header>
-          <button ion-item *ngFor="let proficiency of character.proficiencies" (click)="removeSkill(proficiency)">
-            {{proficiencyNames[proficiency]}}
+          <button ion-item *ngFor="let skill of character.skills" (click)="removeSkill(skill)">
+            {{skillNames[skill]}}
           </button>
           <ion-list-header item-start>Unproficient</ion-list-header>
-          <button ion-item *ngFor="let proficiency of inactiveProficiencies" (click)="addSkill(proficiency)">
-            {{proficiencyNames[proficiency]}}
+          <button ion-item *ngFor="let skill of inactiveSkills" (click)="addSkill(skill)">
+            {{skillNames[skill]}}
           </button>
         </ion-list>
       </ion-slide>

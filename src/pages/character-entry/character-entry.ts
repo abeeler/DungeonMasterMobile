@@ -1,48 +1,68 @@
 import { Component } from '@angular/core';
 import { ViewController, AlertController, NavParams } from 'ionic-angular';
 import { CharacterListPage } from '../character-list/character-list';
-import { Character } from '../../classes/character';
+import { Character, SimpleCharacter } from '../../classes/character';
+import { SQLite, SQLiteObject } from '@ionic-native/sqlite';
+import { CharacterQueries } from '../../classes/character-sql';
 
 @Component({
   selector: 'modal-character-entry',
   templateUrl: 'character-entry.html'
 })
 export class CharacterEntryModal {
+  originatingCharacter: SimpleCharacter;
   character: Character;
 
-  constructor(public params: NavParams, public viewCtrl: ViewController, public alertCtrl: AlertController) {
-    this.character = new Character(params.get(CharacterListPage.CHARACTER_PARAM));
+  constructor(
+      private sqlite: SQLite,
+      public params: NavParams,
+      public viewCtrl: ViewController,
+      public alertCtrl: AlertController) {
+    this.character = new Character();
+    this.originatingCharacter = params.get(CharacterListPage.CHARACTER_PARAM);
+    if (this.originatingCharacter) {
+      CharacterQueries.getDatabase(this.sqlite)
+        .then(db => CharacterQueries.getCharacter(db, this.originatingCharacter.id))
+        .then((character: Character) => this.character = character)
+        .catch(e => console.log(JSON.stringify(e)));
+    }
   }
 
   dismiss() {
-    this.viewCtrl.dismiss(this.character);
+    this.originatingCharacter.name = this.character.name;
+    this.originatingCharacter.characterType = this.character.characterType;
+
+    CharacterQueries.getDatabase(this.sqlite)
+      .then(db => CharacterQueries.saveCharacter(db, this.character))
+      .then(() => this.viewCtrl.dismiss(this.character))
+      .catch(e => console.log(JSON.stringify(e)));
   }
 
   get statisticStrings(): string[] {
     return Character.STATISTICS;
   }
 
-  get proficiencyNames(): string[] {
-    return Character.PROFICIENCIES;
+  get skillNames(): string[] {
+    return Character.SKILLS;
   }
 
-  get inactiveProficiencies(): number[] {
-    let inactiveProficiencies: number[] = [];
-    for (let i = 0; i < Character.PROFICIENCIES.length; i++) {
-      if (this.character.proficiencies.indexOf(i) < 0) {
-        inactiveProficiencies.push(i);
+  get inactiveSkills(): number[] {
+    let inactiveSkills: number[] = [];
+    for (let i = 0; i < Character.SKILLS.length; i++) {
+      if (this.character.skills.indexOf(i) < 0) {
+        inactiveSkills.push(i);
       }
     }
-    return inactiveProficiencies;
+    return inactiveSkills;
   }
 
   removeSkill(skill: number) {
-    this.character.proficiencies.splice(this.character.proficiencies.indexOf(skill), 1);
+    this.character.skills.splice(this.character.skills.indexOf(skill), 1);
   }
 
   addSkill(skill: number) {
-    this.character.proficiencies.push(skill);
-    this.character.proficiencies = this.character.proficiencies.sort((a, b) => a - b);
+    this.character.skills.push(skill);
+    this.character.skills = this.character.skills.sort((a, b) => a - b);
   }
 
   presentSavingThrowList() {

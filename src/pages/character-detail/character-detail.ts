@@ -2,7 +2,9 @@ import { Component } from '@angular/core';
 import { NavController, NavParams, ModalController } from 'ionic-angular';
 import { CharacterListPage } from '../character-list/character-list';
 import { CharacterEntryModal } from '../character-entry/character-entry';
-import { Character } from '../../classes/character';
+import { Character, SimpleCharacter } from '../../classes/character';
+import { SQLite } from '@ionic-native/sqlite';
+import { CharacterQueries } from '../../classes/character-sql';
 
 @Component({
   selector: 'page-character-detail',
@@ -10,19 +12,29 @@ import { Character } from '../../classes/character';
 })
 export class CharacterDetailPage {
   section: string;
+  originatingCharacter: SimpleCharacter;
   character: Character;
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, public modalCtrl: ModalController) {
+  constructor(
+      private sqlite: SQLite,
+      public navCtrl: NavController,
+      public params: NavParams,
+      public modalCtrl: ModalController) {
     this.section = 'stats';
-    this.character = navParams.get(CharacterListPage.CHARACTER_PARAM);
+    this.character = new Character();
+    this.originatingCharacter = params.get(CharacterListPage.CHARACTER_PARAM);
+    CharacterQueries.getDatabase(this.sqlite)
+        .then((db) => CharacterQueries.getCharacter(db, this.originatingCharacter.id))
+        .then(character => this.character = character)
+        .catch(e => console.log(JSON.stringify(e)));
   }
 
   get statisticStrings(): string[] {
     return Character.STATISTICS;
   }
 
-  get proficiencyNames(): string[] {
-    return Character.PROFICIENCIES;
+  get skillNames(): string[] {
+    return Character.SKILLS;
   }
 
   savingThrowClass(index: number) {
@@ -31,7 +43,7 @@ export class CharacterDetailPage {
 
   presentCharacterEntryModal() {
     let data = {};
-    data[CharacterListPage.CHARACTER_PARAM] = JSON.parse(JSON.stringify(this.character));
+    data[CharacterListPage.CHARACTER_PARAM] = this.originatingCharacter;
     let entryModal = this.modalCtrl.create(CharacterEntryModal, data);
     entryModal.onDidDismiss((data: Character) => {
       if (data) {
