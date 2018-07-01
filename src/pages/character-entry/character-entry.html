@@ -15,11 +15,11 @@
           <ion-label floating>Name</ion-label>
           <ion-input name="name" clearInput [(ngModel)]="character.name"></ion-input>
         </ion-item>
-
-        <!--ion-item>
-          <ion-label>{{!character.isPlayerCharacter ? 'Non-' : ''}}Player Character</ion-label>
-          <ion-toggle name="pc" [(ngModel)]="character.isPlayerCharacter"></ion-toggle>
-        </ion-item-->
+        <ion-select class="fullWidth" text-left name="characterType" [(ngModel)]="character.characterType">
+          <ion-option *ngFor="let characterType of characterTypeNames; index as index" [value]="index">
+            {{characterType}}
+          </ion-option>
+        </ion-select>
 
         <h4>Statistics</h4>
         <ion-item *ngFor="let index of [0,1,2,3,4,5]">
@@ -30,8 +30,8 @@
           <ion-input [name]="statisticStrings[index]" [(ngModel)]="character.statistics[index]" type="number"></ion-input>
         </ion-item>
         <button ion-button block margin-top (click)="presentSavingThrowList()">
-            Edit Saving Throws
-          </button>
+          Edit Saving Throws
+        </button>
       </ion-slide>
       <ion-slide>
         <h4>Combat</h4>

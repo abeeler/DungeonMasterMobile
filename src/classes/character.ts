@@ -99,5 +99,11 @@ export class Character extends SimpleCharacter {
       'Survival',
       'Technology'
     ];
+
+    static readonly CHARACTER_TYPES: string[] = [
+      'Player Character',
+      'Non-Player Character',
+      'Monster'
+    ];
   }
   

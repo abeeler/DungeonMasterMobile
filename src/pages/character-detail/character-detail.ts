@@ -37,6 +37,14 @@ export class CharacterDetailPage {
     return Character.SKILLS;
   }
 
+  get characterTypeColor(): string {
+    switch(this.character.characterType) {
+      case 0: return 'secondary';
+      case 1: return 'primary';
+      case 2: return 'danger';
+    }
+  }
+
   savingThrowClass(index: number) {
     return { 'saving-throw': this.character.hasSavingThrow(index) };
   }

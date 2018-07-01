@@ -38,6 +38,10 @@ export class CharacterEntryModal {
       .catch(e => console.log(JSON.stringify(e)));
   }
 
+  get characterTypeNames(): string[] {
+    return Character.CHARACTER_TYPES;
+  }
+
   get statisticStrings(): string[] {
     return Character.STATISTICS;
   }
