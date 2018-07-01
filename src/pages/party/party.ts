@@ -4,6 +4,7 @@ import { Storage } from '@ionic/storage';
 import { CharacterListPage } from '../character-list/character-list';
 import { Character } from '../../classes/character';
 import { CharacterDetailPage } from '../character-detail/character-detail';
+import { CombatPage } from '../combat/combat';
 
 @Component({
   selector: 'page-party',
@@ -48,5 +49,11 @@ export class PartyPage {
 
   saveParty() {
     this.storage.set(PartyPage.STORED_MEMBERS, this.members);
+  }
+
+  startCombat() {
+    let data = {};
+    data[CombatPage.CHARACTERS_PARAM] = this.members;
+    this.navCtrl.push(CombatPage, data);
   }
 }

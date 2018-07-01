@@ -1,8 +1,9 @@
 import { Component } from '@angular/core';
 import { Storage } from '@ionic/storage';
-import { ModalController, NavController, AlertController } from 'ionic-angular';
+import { ModalController, NavController, AlertController, NavParams } from 'ionic-angular';
 import { OrderEntryModal } from './modals/order-entry/order-entry';
 import { Health, CombatantGroup } from '../../classes/combat';
+import { Character } from '../../classes/character';
 
 @Component({
   selector: 'page-combat',
@@ -10,6 +11,7 @@ import { Health, CombatantGroup } from '../../classes/combat';
 })
 export class CombatPage {
   static readonly COMBATANT_PARAM = 'COMBATANT';
+  static readonly CHARACTERS_PARAM = 'characters';
   static readonly STORED_GROUP = 'combat.stored_group';
 
   groups: CombatantGroup[];
@@ -17,6 +19,7 @@ export class CombatPage {
   memberIndex: number;
 
   constructor(
+      params: NavParams,
       public navCtrl: NavController,
       public modalCtrl: ModalController,
       public alertCtrl: AlertController,
@@ -38,6 +41,11 @@ export class CombatPage {
             member.health.current = current;
           }
         }
+      }
+
+      let charactersToAdd = params.get(CombatPage.CHARACTERS_PARAM);
+      if (charactersToAdd) {
+        this.addPassedCombatants(0, charactersToAdd);
       }
     });
   }
@@ -114,5 +122,40 @@ export class CombatPage {
 
   groupsUpdated() {
     this.storage.set(CombatPage.STORED_GROUP, this.groups);
+  }
+
+  addPassedCombatants(index: number, combatants: Character[]) {
+    if (index >= combatants.length) return;
+    let alert = this.alertCtrl.create({
+      title: 'Add Combatant',
+      message: `Enter total initiative for ${combatants[index].name}`,
+      inputs: [{
+        name: 'initiative',
+        placeholder: 'Initiative',
+        type: 'number'
+      }],
+      buttons: [{
+          text: 'Cancel',
+          role: 'cancel'
+        }, {
+          text: 'Skip',
+          handler: () => this.addPassedCombatants(index + 1, combatants)
+        }, {
+          text: 'Enter',
+          handler: data => {
+            this.insertEntry({
+              name: combatants[index].name,
+              initiative: data.initiative,
+              members: [{
+                name: combatants[index].name,
+                health: new Health(combatants[index].maxHealth)
+              }]
+            });
+            this.addPassedCombatants(index + 1, combatants);
+          }
+        }
+      ]
+    });
+    alert.present();
   }
 }

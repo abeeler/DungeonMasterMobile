@@ -54,7 +54,7 @@ export class CharacterListPage {
 
   clickCharacter(event, character: SimpleCharacter) {
     if (this.callback) {
-      this.callback(character.id);
+      this.callback(character);
       this.navCtrl.pop();
     } else {
       let data = {};

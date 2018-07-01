@@ -13,7 +13,7 @@ export class CharacterQueries {
     static readonly SELECT_CHARACTER_SAVING_THROWS = 'SELECT * FROM saving_throw WHERE characterID = ?';
     static readonly SELECT_CHARACTER_SKILLS = 'SELECT * FROM skill WHERE characterID = ?';
 
-    static getCharacter(db: SQLiteObject, id: number): Promise<Character> {
+    static getFullCharacter(db: SQLiteObject, id: number): Promise<Character> {
         let character = new Character();
         return new Promise<Character>((resolve, reject) => {
             db.executeSql(CharacterQueries.SELECT_SPECIFIC_CHARACTER, [id]).then(res => {
@@ -23,13 +23,7 @@ export class CharacterQueries {
                     return;
                 }
 
-                let resultRow = res.rows.item(0);
-                character.id = resultRow.id;
-                character.name = resultRow.name;
-                character.maxHealth = resultRow.maxHealth;
-                character.speed = resultRow.speed;
-                character.armorClass = resultRow.armorClass;
-                character.characterType = resultRow.characterType;
+                CharacterQueries.populateCharacterFromRow(res.rows.item(0), character);
 
                 db.executeSql(CharacterQueries.SELECT_CHARACTER_STATISTICS, [id]).then(res => {
                     if (res.rows.length > 0) {
@@ -59,6 +53,15 @@ export class CharacterQueries {
                 }).catch(reject);
             }).catch(reject);
         });
+    }
+
+    static populateCharacterFromRow(resultRow, character: Character) {
+        character.id = resultRow.id;
+        character.name = resultRow.name;
+        character.maxHealth = resultRow.maxHealth;
+        character.speed = resultRow.speed;
+        character.armorClass = resultRow.armorClass;
+        character.characterType = resultRow.characterType;
     }
 
     static readonly INSERT_CHARACTER = 'INSERT INTO character VALUES(NULL,?,?,?,?,?)';

@@ -21,9 +21,15 @@
     </ion-item-sliding>
   </ion-list>
 
-  <ion-fab right bottom>
+  <ion-fab top right edge>
     <button ion-fab color="primary" (click)="presentCharacterList()">
       <ion-icon name="add"></ion-icon>
+    </button>
+  </ion-fab>
+
+  <ion-fab right bottom>
+    <button ion-fab color="danger" (click)="startCombat()">
+      <ion-icon name="play"></ion-icon>
     </button>
   </ion-fab>
 </ion-content>

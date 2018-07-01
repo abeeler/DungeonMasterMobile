@@ -22,7 +22,7 @@ export class CharacterEntryModal {
     this.originatingCharacter = params.get(CharacterListPage.CHARACTER_PARAM);
     if (this.originatingCharacter) {
       CharacterQueries.getDatabase(this.sqlite)
-        .then(db => CharacterQueries.getCharacter(db, this.originatingCharacter.id))
+        .then(db => CharacterQueries.getFullCharacter(db, this.originatingCharacter.id))
         .then((character: Character) => this.character = character)
         .catch(e => console.log(JSON.stringify(e)));
     }

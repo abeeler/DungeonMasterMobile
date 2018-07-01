@@ -24,7 +24,7 @@ export class CharacterDetailPage {
     this.character = new Character();
     this.originatingCharacter = params.get(CharacterListPage.CHARACTER_PARAM);
     CharacterQueries.getDatabase(this.sqlite)
-        .then((db) => CharacterQueries.getCharacter(db, this.originatingCharacter.id))
+        .then((db) => CharacterQueries.getFullCharacter(db, this.originatingCharacter.id))
         .then(character => this.character = character)
         .catch(e => console.log(JSON.stringify(e)));
   }
