@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { NavController, NavParams, ModalController } from 'ionic-angular';
+import { NavController, NavParams, ModalController, ToastController } from 'ionic-angular';
 import { CharacterListPage } from '../character-list/character-list';
 import { CharacterEntryModal } from '../character-entry/character-entry';
 import { Character, SimpleCharacter } from '../../classes/character';
@@ -19,7 +19,8 @@ export class CharacterDetailPage {
       private sqlite: SQLite,
       public navCtrl: NavController,
       public params: NavParams,
-      public modalCtrl: ModalController) {
+      public modalCtrl: ModalController,
+      public toastCtrl: ToastController) {
     this.section = 'stats';
     this.character = new Character();
     this.originatingCharacter = params.get(CharacterListPage.CHARACTER_PARAM);
@@ -68,5 +69,15 @@ export class CharacterDetailPage {
     entryModal.present({
       keyboardClose: false
     });
+  }
+
+  showCharacterType() {
+    let toast = this.toastCtrl.create({
+      message: Character.CHARACTER_TYPES[this.character.characterType],
+      duration: 1000,
+      position: 'bottom'
+    });
+
+    toast.present();
   }
 }

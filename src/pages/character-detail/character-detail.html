@@ -5,10 +5,15 @@
     </button>
     <ion-title>{{character.name}}</ion-title>
     <ion-buttons end>
-      <ion-icon 
-          name="contact"
-          [color]="characterTypeColor" 
-          margin-right></ion-icon>
+      <button
+          ion-button
+          icon-only
+          large
+          margin-right
+          [color]="characterTypeColor"
+          (click)="showCharacterType()">
+        <ion-icon name="contact"></ion-icon>
+      </button>
     </ion-buttons>
   </ion-navbar>
   <ion-segment [(ngModel)]="section">
