@@ -19,6 +19,10 @@ export class DicePage {
   roll() {
     if (this.recentResult) {
       this.results.splice(0, 0, this.recentResult);
+
+      if (this.results.length > 50) {
+        this.results.length = 50;
+      }
     }
 
     var roll = Math.floor(Math.random() * this.dieSize + 1);
@@ -27,5 +31,10 @@ export class DicePage {
     } else {
       this.recentResult = roll.toLocaleString();
     }
+  }
+
+  clearResults() {
+    this.results = [];
+    this.recentResult = '';
   }
 }
