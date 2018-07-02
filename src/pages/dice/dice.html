@@ -15,23 +15,21 @@
     <p id="recentResult" no-margin text-center>{{recentResult}}</p>
   </div>
 
-  <p>Select a die type to roll:</p>
-  <ion-select padding-vertical class="fullWidth" [(ngModel)]="dieSize">
-    <ion-option value="2">Coin</ion-option>
-    <ion-option value="4">d4</ion-option>
-    <ion-option value="6">d6</ion-option>
-    <ion-option value="8">d8</ion-option>
-    <ion-option value="12">d12</ion-option>
-    <ion-option value="20">d20</ion-option>
-    <ion-option value="100">d100</ion-option>
-  </ion-select>
+  <ion-footer>
+    <ion-item>
+      <ion-select class="fullWidth" [(ngModel)]="dieSize">
+        <ion-option value="2">Coin</ion-option>
+        <ion-option value="4">d4</ion-option>
+        <ion-option value="6">d6</ion-option>
+        <ion-option value="8">d8</ion-option>
+        <ion-option value="12">d12</ion-option>
+        <ion-option value="20">d20</ion-option>
+        <ion-option value="100">d100</ion-option>
+      </ion-select>
+    </ion-item>
 
-  <button 
-      id="rollButton"
-      class="fullWidth"
-      ion-button
-      full primary
-      (click)="roll()">
-      Roll!
-  </button>
+    <button ion-button large block (click)="roll()">
+        Roll!
+    </button>
+  </ion-footer>
 </ion-content>

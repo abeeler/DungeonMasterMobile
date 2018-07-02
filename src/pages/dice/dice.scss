@@ -1,11 +1,11 @@
 page-dice {
     #resultSection {
         position: relative;
-        height: 60vh;
+        height: 90%;
 
         ion-scroll {
             margin-left: -16px;
-            height: 100%;
+            height: 90%;
             width: 96px;
         }
 
@@ -14,15 +14,11 @@ page-dice {
 
             position: absolute;
             top: 45%;
-            left: 45%;
+            left: 40%;
             height: 50%;
             width: 80%;
             margin: -15% 0 0 -25%;
         }
-    }
-
-    #rollButton {
-        margin-top: 5vh;
     }
 
     .item-cover {
