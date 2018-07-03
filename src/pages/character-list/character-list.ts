@@ -3,8 +3,7 @@ import { NavController, ModalController, NavParams } from 'ionic-angular';
 import { CharacterDetailPage } from '../character-detail/character-detail';
 import { CharacterEntryModal } from '../character-entry/character-entry';
 import { Character, SimpleCharacter } from '../../classes/character';
-import { SQLite } from '@ionic-native/sqlite';
-import { CharacterQueries } from '../../classes/character-sql';
+import { CharacterProvider } from '../../providers/character/character';
 
 @Component({
   selector: 'page-character-list',
@@ -21,7 +20,7 @@ export class CharacterListPage {
   characters: SimpleCharacter[];
 
   constructor(
-      private sqlite: SQLite,
+      public characterProvider: CharacterProvider,
       public params: NavParams,
       public navCtrl: NavController,
       public modalCtrl: ModalController) {
@@ -30,7 +29,8 @@ export class CharacterListPage {
     this.loaded = false;
 
     this.characters = [];
-    this.loadFromDatabase();
+    this.characterProvider.getSimpleCharacterList()
+        .then(characters => this.characters = characters);
   }
 
   get filteredCharacters() {
@@ -61,27 +61,5 @@ export class CharacterListPage {
       data[CharacterListPage.CHARACTER_PARAM] = character;
       this.navCtrl.push(CharacterDetailPage, data);
     }
-  }
-
-  loadFromDatabase() {
-    CharacterQueries.getDatabase(this.sqlite)
-      .then(db => {
-        db.executeSql(CharacterQueries.CREATE_CHARACTER_TABLE, {})
-          .then(() => db.executeSql(CharacterQueries.CREATE_STATISTIC_TABLE, {}))
-          .then(() => db.executeSql(CharacterQueries.CREATE_SAVING_THROW_TABLE, {}))
-          .then(() => db.executeSql(CharacterQueries.CREATE_SKILL_TABLE, {}))
-          .then(() => db.executeSql(CharacterQueries.CREATE_VARIABLE_TABLE, {}))
-          .then(() => db.executeSql(CharacterQueries.SELECT_ALL_NAMES, {}))
-          .then(res => {
-            for (let i = 0; i < res.rows.length; i++) {
-              let resultRow = res.rows.item(i);
-              this.characters.push(new SimpleCharacter(
-                resultRow.id,
-                resultRow.name,
-                resultRow.characterType
-              ));
-            }
-          }).catch(e => console.log(JSON.stringify(e)));
-      });
   }
 }

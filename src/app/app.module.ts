@@ -20,6 +20,7 @@ import { CharacterListPage } from '../pages/character-list/character-list';
 import { CharacterDetailPage } from '../pages/character-detail/character-detail';
 import { CharacterEntryModal } from '../pages/character-entry/character-entry';
 import { PartyPage } from '../pages/party/party';
+import { CharacterProvider } from '../providers/character/character';
 
 @NgModule({
   declarations: [
@@ -57,7 +58,8 @@ import { PartyPage } from '../pages/party/party';
     StatusBar,
     SplashScreen,
     {provide: ErrorHandler, useClass: IonicErrorHandler},
-    SQLite
+    SQLite,
+    CharacterProvider
   ]
 })
 export class AppModule {}

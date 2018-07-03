@@ -3,8 +3,7 @@ import { NavController, NavParams, ModalController, ToastController } from 'ioni
 import { CharacterListPage } from '../character-list/character-list';
 import { CharacterEntryModal } from '../character-entry/character-entry';
 import { Character, SimpleCharacter } from '../../classes/character';
-import { SQLite } from '@ionic-native/sqlite';
-import { CharacterQueries } from '../../classes/character-sql';
+import { CharacterProvider } from '../../providers/character/character';
 
 @Component({
   selector: 'page-character-detail',
@@ -16,7 +15,7 @@ export class CharacterDetailPage {
   character: Character;
 
   constructor(
-      private sqlite: SQLite,
+      public characterProvider: CharacterProvider,
       public navCtrl: NavController,
       public params: NavParams,
       public modalCtrl: ModalController,
@@ -24,10 +23,9 @@ export class CharacterDetailPage {
     this.section = 'stats';
     this.character = new Character();
     this.originatingCharacter = params.get(CharacterListPage.CHARACTER_PARAM);
-    CharacterQueries.getDatabase(this.sqlite)
-        .then((db) => CharacterQueries.getFullCharacter(db, this.originatingCharacter.id))
-        .then(character => this.character = character)
-        .catch(e => console.log(JSON.stringify(e)));
+
+    characterProvider.getCharacterDetails(this.originatingCharacter.id)
+      .then(character => this.character = character);
   }
 
   get statisticStrings(): string[] {

@@ -2,8 +2,7 @@ import { Component } from '@angular/core';
 import { ViewController, AlertController, NavParams } from 'ionic-angular';
 import { CharacterListPage } from '../character-list/character-list';
 import { Character, SimpleCharacter } from '../../classes/character';
-import { SQLite, SQLiteObject } from '@ionic-native/sqlite';
-import { CharacterQueries } from '../../classes/character-sql';
+import { CharacterProvider } from '../../providers/character/character';
 
 @Component({
   selector: 'modal-character-entry',
@@ -14,15 +13,14 @@ export class CharacterEntryModal {
   character: Character;
 
   constructor(
-      private sqlite: SQLite,
+      public characterProvider: CharacterProvider,
       public params: NavParams,
       public viewCtrl: ViewController,
       public alertCtrl: AlertController) {
     this.character = new Character();
     this.originatingCharacter = params.get(CharacterListPage.CHARACTER_PARAM);
     if (this.originatingCharacter) {
-      CharacterQueries.getDatabase(this.sqlite)
-        .then(db => CharacterQueries.getFullCharacter(db, this.originatingCharacter.id))
+      characterProvider.getCharacterDetails(this.originatingCharacter.id)
         .then((character: Character) => this.character = character)
         .catch(e => console.log(JSON.stringify(e)));
     }
@@ -32,8 +30,7 @@ export class CharacterEntryModal {
     this.originatingCharacter.name = this.character.name;
     this.originatingCharacter.characterType = this.character.characterType;
 
-    CharacterQueries.getDatabase(this.sqlite)
-      .then(db => CharacterQueries.saveCharacter(db, this.character))
+    this.characterProvider.saveCharacter(this.character)
       .then(() => this.viewCtrl.dismiss(this.character))
       .catch(e => console.log(JSON.stringify(e)));
   }
