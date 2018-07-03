@@ -9,45 +9,48 @@ export class CharacterProvider {
   database: SQLiteObject;
 
   constructor(private sqlite: SQLite, private platform: Platform) {
-      this.platform.ready().then(() => {
-          this.sqlite.create(CharacterQueries.DATABASE)
-          .then((db: SQLiteObject) => {
-              this.database = db;
-              db.executeSql(CharacterQueries.CREATE_CHARACTER_TABLE, {})
-              .then(() => db.executeSql(CharacterQueries.CREATE_STATISTIC_TABLE, {}))
-              .then(() => db.executeSql(CharacterQueries.CREATE_SAVING_THROW_TABLE, {}))
-              .then(() => db.executeSql(CharacterQueries.CREATE_SKILL_TABLE, {}))
-              .then(() => db.executeSql(CharacterQueries.CREATE_VARIABLE_TABLE, {}));
-          });
-      });
+  }
+
+  get openDatabase(): Promise<SQLiteObject> {
+    if (this.database) {
+      return Promise.resolve(this.database);
+    }
+
+    return this.platform.ready()
+      .then(() => this.sqlite.create(CharacterQueries.DATABASE))
+      .then((db: SQLiteObject) => Promise.resolve(this.database = db))
+      .then(() => this.database.executeSql(CharacterQueries.CREATE_CHARACTER_TABLE, {}))
+      .then(() => this.database.executeSql(CharacterQueries.CREATE_STATISTIC_TABLE, {}))
+      .then(() => this.database.executeSql(CharacterQueries.CREATE_SAVING_THROW_TABLE, {}))
+      .then(() => this.database.executeSql(CharacterQueries.CREATE_SKILL_TABLE, {}))
+      .then(() => this.database.executeSql(CharacterQueries.CREATE_VARIABLE_TABLE, {}))
+      .then(() => Promise.resolve(this.database));
   }
 
   getSimpleCharacterList(): Promise<SimpleCharacter[]> {
-    return new Promise((resolve, reject) => {
-      this.database.executeSql(CharacterQueries.SELECT_ALL_NAMES, {})
-        .then(res => {
-          let characters: SimpleCharacter[] = [];
-          for (let i = 0; i < res.rows.length; i++) {
-              let resultRow = res.rows.item(i);
-              characters.push(new SimpleCharacter(
-                  resultRow.id,
-                  resultRow.name,
-                  resultRow.characterType
-              ));
-          }
-          resolve(characters);
-        }).catch(reject);
-    });
+    return this.openDatabase
+      .then(db => db.executeSql(CharacterQueries.SELECT_ALL_NAMES, {}))
+      .then(res => {
+        let characters: SimpleCharacter[] = [];
+        for (let i = 0; i < res.rows.length; i++) {
+            let resultRow = res.rows.item(i);
+            characters.push(new SimpleCharacter(
+                resultRow.id,
+                resultRow.name,
+                resultRow.characterType
+            ));
+        }
+        return Promise.resolve(characters);
+      });
   }
 
   getCharacterDetails(id: number): Promise<Character> {
     let character = new Character();
-    return new Promise<Character>((resolve, reject) => {
-      this.database.executeSql(CharacterQueries.SELECT_SPECIFIC_CHARACTER, [id]).then(res => {
+    return this.openDatabase
+      .then(db => db.executeSql(CharacterQueries.SELECT_SPECIFIC_CHARACTER, [id]))
+      .then(res => {
         if (res.rows.length === 0) {
-            // TODO: Expected character but found none?
-            resolve(character);
-            return;
+            throw new Error(`Expected character with id ${id} but found none`);
         }
         let resultRow = res.rows.item(0);
         character.id = resultRow.id;
@@ -56,59 +59,65 @@ export class CharacterProvider {
         character.speed = resultRow.speed;
         character.armorClass = resultRow.armorClass;
         character.characterType = resultRow.characterType;
-
-        this.database.executeSql(CharacterQueries.SELECT_CHARACTER_STATISTICS, [id]).then(res => {
-          if (res.rows.length > 0) {
-            let resultRow = res.rows.item(0);
-            character.statistics = [
-              resultRow.strength,
-              resultRow.dexterity,
-              resultRow.constitution,
-              resultRow.intelligence,
-              resultRow.wisdom,
-              resultRow.charisma,
-            ];
-          }
-          
-          this.database.executeSql(CharacterQueries.SELECT_CHARACTER_SAVING_THROWS, [id]).then(res => {
-            for (let i = 0; i < res.rows.length; i++) {
-              character.savingThrows.push(res.rows.item(i).statistic);
-            }
-
-            this.database.executeSql(CharacterQueries.SELECT_CHARACTER_SKILLS, [id]).then(res => {
-              for (let i = 0; i < res.rows.length; i++) {
-                  character.skills.push(res.rows.item(i).skill);
-              }
-              resolve(character);
-            }).catch(reject);
-          }).catch(reject);
-        }).catch(reject);
-      }).catch(reject);
-    });
+        return Promise.resolve();
+      })
+      .then(() => this.database.executeSql(CharacterQueries.SELECT_CHARACTER_STATISTICS, [id]))
+      .then(res => {
+        if (res.rows.length > 0) {
+          let resultRow = res.rows.item(0);
+          character.statistics = [
+            resultRow.strength,
+            resultRow.dexterity,
+            resultRow.constitution,
+            resultRow.intelligence,
+            resultRow.wisdom,
+            resultRow.charisma,
+          ];
+        }
+        return Promise.resolve();
+      })
+      .then(() => this.database.executeSql(CharacterQueries.SELECT_CHARACTER_SAVING_THROWS, [id]))
+      .then(res => {
+        for (let i = 0; i < res.rows.length; i++) {
+          character.savingThrows.push(res.rows.item(i).statistic);
+        }
+        return Promise.resolve();
+      })
+      .then(() => this.database.executeSql(CharacterQueries.SELECT_CHARACTER_SKILLS, [id]))
+      .then(res => {
+        for (let i = 0; i < res.rows.length; i++) {
+            character.skills.push(res.rows.item(i).skill);
+        }
+        return Promise.resolve(character);
+      });
   }
 
   saveCharacter(character: Character): Promise<void> {
     if (character.id) {
-      return this.database.executeSql(CharacterQueries.UPDATE_CHARACTER, [character.name, character.maxHealth, character.speed, character.armorClass, character.characterType, character.id])
-          .then(() => this.saveStatistics(character, false))
-          .then(() => this.clearSavingThrows(character))
-          .then(() => this.createMapping('saving_throw', character.id, character.savingThrows))
-          .then(() => this.clearSkills(character))
-          .then(() => this.createMapping('skill', character.id, character.skills));
+      return this.openDatabase
+        .then(() => this.database.executeSql(CharacterQueries.UPDATE_CHARACTER, [character.name, character.maxHealth, character.speed, character.armorClass, character.characterType, character.id]))
+        .then(() => this.saveStatistics(character, false))
+        .then(() => this.clearSavingThrows(character))
+        .then(() => this.createMapping('saving_throw', character.id, character.savingThrows))
+        .then(() => this.clearSkills(character))
+        .then(() => this.createMapping('skill', character.id, character.skills));
     } else {
-      return this.database.executeSql(CharacterQueries.INSERT_CHARACTER, [character.name, character.maxHealth, character.speed, character.armorClass, character.characterType])
-          .then(() => this.saveStatistics(character, true))
-          .then(() => this.createMapping('saving_throw', character.id, character.savingThrows))
-          .then(() => this.createMapping('skill', character.id, character.skills));
+      return this.openDatabase
+        .then(() => this.database.executeSql(CharacterQueries.INSERT_CHARACTER, [character.name, character.maxHealth, character.speed, character.armorClass, character.characterType]))
+        .then(() => this.saveStatistics(character, true))
+        .then(() => this.createMapping('saving_throw', character.id, character.savingThrows))
+        .then(() => this.createMapping('skill', character.id, character.skills));
     }
   }
 
   clearSavingThrows(character: Character): Promise<void> {
-    return this.database.executeSql(CharacterQueries.CLEAR_SAVING_THROWS, [character.id]);
+    return this.openDatabase
+      .then(() => this.database.executeSql(CharacterQueries.CLEAR_SAVING_THROWS, [character.id]));
   }
 
   clearSkills(character: Character): Promise<void> {
-    return this.database.executeSql(CharacterQueries.CLEAR_SKILLS, [character.id]);
+    return this.openDatabase
+      .then(() => this.database.executeSql(CharacterQueries.CLEAR_SKILLS, [character.id]));
   }
 
   createMapping(
@@ -125,7 +134,8 @@ export class CharacterProvider {
       insertQuery += `(${id}, ${arr[i]})`; 
     }
 
-    return this.database.executeSql(insertQuery, {});
+    return this.openDatabase
+      .then(() => this.database.executeSql(insertQuery, {}));
   }
 
   saveStatistics(character: Character, isInsert: boolean): Promise<void> {
@@ -135,6 +145,7 @@ export class CharacterProvider {
         values.push(stat);
     }
     if (!isInsert) values.push(character.id);
-    return this.database.executeSql(isInsert ? CharacterQueries.INSERT_STATISTICS : CharacterQueries.UPDATE_STATISTICS, values);
+    return this.openDatabase
+      .then(() => this.database.executeSql(isInsert ? CharacterQueries.INSERT_STATISTICS : CharacterQueries.UPDATE_STATISTICS, values));
   }
 }
