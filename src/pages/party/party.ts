@@ -77,6 +77,8 @@ export class PartyPage {
   startCombat() {
     let data = {};
     data[CombatPage.CHARACTERS_PARAM] = this.members;
-    this.navCtrl.push(CombatPage, data);
+    this.navCtrl.push(CombatPage, data, {
+      keyboardClose: false
+    });
   }
 }

@@ -2,8 +2,10 @@ export class Health {
   max: number;
   current: number;
 
-  constructor(max: number) {
-    this.max = this.current = Math.floor(max);
+  constructor(max: number, current: number = max) {
+    this.max = Math.floor(max);
+    this.current = max;
+    this.change(-(this.max - Math.floor(current)));
   }   
 
   public change(delta: number) {

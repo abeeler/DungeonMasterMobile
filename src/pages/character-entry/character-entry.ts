@@ -67,10 +67,6 @@ export class CharacterEntryModal {
     return inactiveSkills;
   }
 
-  typeChange(type: number) {
-    console.log(type);
-  }
-
   removeSkill(skill: number) {
     this.character.skills.splice(this.character.skills.indexOf(skill), 1);
   }

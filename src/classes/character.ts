@@ -1,3 +1,5 @@
+import { Health } from "./combat";
+
 export class SimpleCharacter {
   constructor(
     public id: number,
@@ -60,6 +62,10 @@ export class Character extends SimpleCharacter {
 
     public get isPlayerCharacter(): boolean {
       return this.characterType === 0;
+    }
+
+    public get health(): Health {
+      return new Health(this.maxHealth);
     }
   
     static readonly STRENGTH = 0;
@@ -167,6 +173,10 @@ export class Character extends SimpleCharacter {
         case (this.level < 17): return 5;
         default: return 6;
       }
+    }
+
+    public get health(): Health {
+      return new Health(this.maxHealth, this.hitPoints);
     }
 
     static readonly CLASS_NAMES: string[] = [

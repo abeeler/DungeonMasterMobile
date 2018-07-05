@@ -68,13 +68,9 @@
         Armor Class
         <span item-end>{{character.armorClass}}</span>
       </ion-item>
-      <ion-item *ngIf="character.isPlayerCharacter">
-        Current Health
-        <span item-end class="health">{{character.hitPoints}}</span>
-      </ion-item>
       <ion-item>
-        Max Health
-        <span item-end class="health">{{character.maxHealth}}</span>
+        Health
+        <span item-end class="health">{{character.health.current}}/{{character.health.max}}</span>
       </ion-item>
       <ion-item *ngIf="character.isPlayerCharacter">
         Hit Die

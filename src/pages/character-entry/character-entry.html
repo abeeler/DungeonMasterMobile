@@ -17,7 +17,7 @@
           <ion-input name="name" clearInput [(ngModel)]="character.name"></ion-input>
         </ion-item>
         <ion-item>
-          <ion-select class="fullWidth" text-left name="characterType" [(ngModel)]="character.characterType" #characterType (ionChange)="typeChange(characterType.value)">
+          <ion-select class="fullWidth" text-left name="characterType" [(ngModel)]="character.characterType">
             <ion-option *ngFor="let characterType of characterTypeNames; index as index" [value]="index">
               {{characterType}}
             </ion-option>

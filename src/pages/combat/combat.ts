@@ -62,20 +62,13 @@ export class CombatPage {
     if (!group) {
       return;
     }
-    
-    // If no saved groups, push immediately
-    if (this.groups.length == 0) {
-      this.groups.push(group);
-      return;
-    }
 
     // Otherwise loop over each group to find sorted initiative
     let inserted = false;
-    for (var index = 0; index < this.groups.length; index++) {
+    for (let index = 0; index < this.groups.length && !inserted; index++) {
       if (this.groups[index].initiative < group.initiative) {
         this.groups.splice(index, 0, group);
         inserted = true;
-        break;
       }
     }
     
@@ -145,10 +138,10 @@ export class CombatPage {
           handler: data => {
             this.insertEntry({
               name: combatants[index].name,
-              initiative: data.initiative,
+              initiative: Math.floor(data.initiative),
               members: [{
                 name: combatants[index].name,
-                health: new Health(combatants[index].maxHealth)
+                health: combatants[index].health
               }]
             });
             this.addPassedCombatants(index + 1, combatants);
