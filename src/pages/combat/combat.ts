@@ -13,6 +13,7 @@ export class CombatPage {
   static readonly COMBATANT_PARAM = 'COMBATANT';
   static readonly CHARACTERS_PARAM = 'characters';
   static readonly STORED_GROUP = 'combat.stored_group';
+  static readonly STORED_INDICES = 'combat.stored_indices';
 
   groups: CombatantGroup[];
   groupIndex: number;
@@ -48,6 +49,13 @@ export class CombatPage {
         this.addPassedCombatants(0, charactersToAdd);
       }
     });
+
+    storage.get(CombatPage.STORED_INDICES).then((indices: number[]) => {
+      if (indices) {
+        this.groupIndex = indices[0];
+        this.memberIndex = indices[1];
+      }
+    })
   }
 
   presentOrderEntryModal() {
@@ -91,6 +99,8 @@ export class CombatPage {
         this.groupIndex = 0;
       }
     }
+
+    this.storage.set(CombatPage.STORED_INDICES, [this.groupIndex, this.memberIndex]);
   }
 
   resetCombat() {
@@ -135,6 +145,7 @@ export class CombatPage {
       this.memberIndex = 0;
     }
 
+    this.storage.set(CombatPage.STORED_INDICES, [this.groupIndex, this.memberIndex]);
     this.storage.set(CombatPage.STORED_GROUP, this.groups);
   }
 
