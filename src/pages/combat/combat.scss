@@ -1,0 +1,15 @@
+page-combat {
+    button.selected {
+        background-color: color($colors, primary);
+        color: white;
+
+        ion-badge {
+            color: white;
+        }
+    }
+
+    button.group {
+        margin-left: 5%;
+        width: 95%;
+    }
+}

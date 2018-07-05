@@ -1,0 +1,10 @@
+<ion-content padding>
+  <h6 class="fullWidth" text-center>{{combatant.name}} - {{combatant.health.current}}/{{combatant.health.max}}</h6>
+  <button ion-button float-left color="danger" (click)="combatant.health.change(-1)">-1 HP</button>
+  <button ion-button float-right color="secondary" (click)="combatant.health.change(1)">+1 HP</button>
+  <button ion-button float-left color="danger" (click)="combatant.health.change(-5)">-5 HP</button>
+  <button ion-button float-right color="secondary" (click)="combatant.health.change(5)">+5 HP</button>
+  <button ion-button float-left color="danger" (click)="combatant.health.change(-10)">-10 HP</button>
+  <button ion-button float-right color="secondary" (click)="combatant.health.change(10)">+10 HP</button>
+  <button ion-button (click)="dismiss()">Done</button>
+</ion-content>

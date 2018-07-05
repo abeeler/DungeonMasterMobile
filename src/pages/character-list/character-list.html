@@ -1,0 +1,26 @@
+<ion-header>
+  <ion-navbar>
+    <button ion-button menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </button>
+    <ion-title>Characters</ion-title>
+  </ion-navbar>
+  <ion-segment [(ngModel)]="filter">
+    <ion-segment-button value="all">All</ion-segment-button>
+    <ion-segment-button value="pcOnly">Players</ion-segment-button>
+  </ion-segment>
+</ion-header>
+
+<ion-content>
+  <ion-list>
+    <button ion-item *ngFor="let character of filteredCharacters" (click)="clickCharacter($event, character)">
+      {{character.name}}
+    </button>
+  </ion-list>
+
+  <ion-fab right bottom>
+      <button ion-fab color="primary" (click)="presentCharacterEntryModal()">
+        <ion-icon name="add"></ion-icon>
+      </button>
+  </ion-fab>
+</ion-content>

@@ -1,0 +1,28 @@
+page-dice {
+    #resultSection {
+        position: relative;
+        height: 90%;
+
+        ion-scroll {
+            margin-left: -16px;
+            height: 90%;
+            width: 96px;
+        }
+
+        #recentResult {
+            font-size: 100px;
+
+            position: absolute;
+            top: 45%;
+            left: 40%;
+            height: 50%;
+            width: 80%;
+            margin: -15% 0 0 -25%;
+        }
+    }
+
+    .item-cover {
+        width: 0;
+        height: 0;
+    }
+}

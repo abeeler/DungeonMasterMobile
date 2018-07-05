@@ -1,0 +1,33 @@
+<ion-content padding>
+  <form (ngSubmit)="dismiss()">
+    <ion-item>
+      <ion-label>{{isIndividual ? 'Individual' : 'Group'}}</ion-label>
+      <ion-toggle name="isIndividual" [(ngModel)]="isIndividual"></ion-toggle>
+    </ion-item>
+    <ion-item>
+      <ion-input name="name"
+          [(ngModel)]="name"
+          placeholder="Name"
+          autofocus></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label>Initiative</ion-label>
+      <ion-input name="initiative"
+          [(ngModel)]="initiative"
+          type="number"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label>Max Health</ion-label>
+      <ion-input name="maxHealth"
+          [(ngModel)]="maxHealth"
+          type="number"></ion-input>
+    </ion-item>
+    <ion-item *ngIf="!isIndividual">
+      <ion-label>Group Size</ion-label>
+      <ion-input name="memberCount"
+          [(ngModel)]="memberCount"
+          type="number"></ion-input>
+    </ion-item>
+    <button ion-button secondary type="submit">Add to Combat</button>
+  </form>
+</ion-content>

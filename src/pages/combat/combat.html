@@ -1,0 +1,30 @@
+<ion-header>
+  <ion-navbar>
+    <button ion-button menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </button>
+    <ion-title>Combat</ion-title>
+    <ion-buttons end margin-right>
+      <button ion-button (click)="resetCombat()">Reset</button>
+      <button ion-button (click)="presentOrderEntryModal()">Add</button>
+    </ion-buttons>
+  </ion-navbar>
+</ion-header>
+
+<ion-content padding>
+  <ion-list>
+    <ion-item-group>
+      <combatant-group
+          *ngFor="let group of groups; index as index"
+          [group]="group"
+          [active]="index === groupIndex"
+          [memberIndex]="memberIndex"
+          (updated)="groupsUpdated($event)">
+      </combatant-group>
+    </ion-item-group>
+  </ion-list>
+</ion-content>
+
+<ion-footer>
+    <button ion-button secondary full (click)="nextCombatant()">Next Combatant</button>
+</ion-footer>

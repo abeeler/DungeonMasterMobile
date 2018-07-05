@@ -1,0 +1,13 @@
+page-character-detail {
+    .saving-throw {
+        color: color($colors, secondary);
+    }
+
+    .health {
+        color: color($colors, danger);
+    }
+
+    ion-slide.swiper-slide {
+        align-items: flex-start;
+    }
+}
