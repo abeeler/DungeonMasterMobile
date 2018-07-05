@@ -1,5 +1,5 @@
-import { Component } from '@angular/core';
-import { NavController, NavParams, ModalController, ToastController } from 'ionic-angular';
+import { Component, ViewChild } from '@angular/core';
+import { NavController, NavParams, ModalController, ToastController, Slides } from 'ionic-angular';
 import { CharacterListPage } from '../character-list/character-list';
 import { CharacterEntryModal } from '../character-entry/character-entry';
 import { Character, SimpleCharacter, PlayerCharacter } from '../../classes/character';
@@ -10,7 +10,9 @@ import { CharacterProvider } from '../../providers/character/character';
   templateUrl: 'character-detail.html'
 })
 export class CharacterDetailPage {
-  section: string;
+  @ViewChild(Slides) slides: Slides;
+  
+  currentSegment: string;
   originatingCharacter: SimpleCharacter;
   character: Character;
 
@@ -20,13 +22,14 @@ export class CharacterDetailPage {
       public params: NavParams,
       public modalCtrl: ModalController,
       public toastCtrl: ToastController) {
-    this.section = 'stats';
+    this.currentSegment = "1";
     this.character = new Character({name: 'Loading...'});
     this.originatingCharacter = params.get(CharacterListPage.CHARACTER_PARAM);
 
     characterProvider.getCharacterDetails(this.originatingCharacter.id)
       .then(character => {
         this.character = character;
+        if (character.isPlayerCharacter) this.currentSegment = "0";
       })
       .catch(e => console.log(JSON.stringify(e)));
   }
@@ -68,8 +71,8 @@ export class CharacterDetailPage {
           }
         }
         this.character = data;
-        if (this.section == 'general' && !this.character.isPlayerCharacter) {
-          this.section = 'stats';
+        if (this.currentSegment == '0' && !this.character.isPlayerCharacter) {
+          this.currentSegment = '1';
         }
       }
     });
@@ -87,5 +90,18 @@ export class CharacterDetailPage {
     });
 
     toast.present();
+  }
+
+  slideChanged() {
+    let activeIndex = this.slides.getActiveIndex();
+    if (activeIndex > (this.character.isPlayerCharacter ? 3 : 2)) return;
+    if (!this.character.isPlayerCharacter) activeIndex++;
+    this.currentSegment = activeIndex + "";
+  }
+
+  segmentChange(event) {
+    let slideIndex = Math.floor(event.value);
+    if (!this.character.isPlayerCharacter) slideIndex--;
+    this.slides.slideTo(slideIndex, 500);
   }
 }
