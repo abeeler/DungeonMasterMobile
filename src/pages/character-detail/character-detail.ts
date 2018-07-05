@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { NavController, NavParams, ModalController, ToastController } from 'ionic-angular';
 import { CharacterListPage } from '../character-list/character-list';
 import { CharacterEntryModal } from '../character-entry/character-entry';
-import { Character, SimpleCharacter } from '../../classes/character';
+import { Character, SimpleCharacter, PlayerCharacter } from '../../classes/character';
 import { CharacterProvider } from '../../providers/character/character';
 
 @Component({
@@ -21,11 +21,14 @@ export class CharacterDetailPage {
       public modalCtrl: ModalController,
       public toastCtrl: ToastController) {
     this.section = 'stats';
-    this.character = new Character();
+    this.character = new Character({name: 'Loading...'});
     this.originatingCharacter = params.get(CharacterListPage.CHARACTER_PARAM);
 
     characterProvider.getCharacterDetails(this.originatingCharacter.id)
-      .then(character => this.character = character);
+      .then(character => {
+        this.character = character;
+      })
+      .catch(e => console.log(JSON.stringify(e)));
   }
 
   get statisticStrings(): string[] {
@@ -42,6 +45,10 @@ export class CharacterDetailPage {
       case 1: return 'primary';
       case 2: return 'danger';
     }
+  }
+
+  get isPlayerCharacter(): boolean {
+    return this.character instanceof PlayerCharacter;
   }
 
   savingThrowClass(index: number) {
@@ -61,6 +68,9 @@ export class CharacterDetailPage {
           }
         }
         this.character = data;
+        if (this.section == 'general' && !this.character.isPlayerCharacter) {
+          this.section = 'stats';
+        }
       }
     });
 

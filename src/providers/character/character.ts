@@ -2,7 +2,7 @@ import { Injectable } from "@angular/core";
 import { Platform } from 'ionic-angular';
 import { SQLiteObject, SQLite } from "@ionic-native/sqlite";
 import { CharacterQueries } from "../../classes/character-sql";
-import { SimpleCharacter, Character } from "../../classes/character";
+import { SimpleCharacter, Character, PlayerCharacter } from "../../classes/character";
 
 @Injectable()
 export class CharacterProvider {
@@ -17,6 +17,7 @@ export class CharacterProvider {
     }
 
     return this.platform.ready()
+      //.then(() => this.sqlite.deleteDatabase(CharacterQueries.DATABASE))
       .then(() => this.sqlite.create(CharacterQueries.DATABASE))
       .then((db: SQLiteObject) => Promise.resolve(this.database = db))
       .then(() => this.database.executeSql(CharacterQueries.CREATE_CHARACTER_TABLE, {}))
@@ -59,7 +60,6 @@ export class CharacterProvider {
         character.speed = resultRow.speed;
         character.armorClass = resultRow.armorClass;
         character.characterType = resultRow.characterType;
-        return Promise.resolve();
       })
       .then(() => this.database.executeSql(CharacterQueries.SELECT_CHARACTER_STATISTICS, [id]))
       .then(res => {
@@ -74,53 +74,70 @@ export class CharacterProvider {
             resultRow.charisma,
           ];
         }
-        return Promise.resolve();
       })
       .then(() => this.database.executeSql(CharacterQueries.SELECT_CHARACTER_SAVING_THROWS, [id]))
       .then(res => {
         for (let i = 0; i < res.rows.length; i++) {
           character.savingThrows.push(res.rows.item(i).statistic);
         }
-        return Promise.resolve();
       })
       .then(() => this.database.executeSql(CharacterQueries.SELECT_CHARACTER_SKILLS, [id]))
       .then(res => {
         for (let i = 0; i < res.rows.length; i++) {
-            character.skills.push(res.rows.item(i).skill);
+          character.skills.push(res.rows.item(i).skill);
         }
-        return Promise.resolve(character);
-      });
+      })
+      .then(() => this.getPlayerCharacterDetails(character));
+  }
+
+  private getPlayerCharacterDetails(character: Character): Promise<Character> {
+    if (!character.isPlayerCharacter) return Promise.resolve(character);
+    let playerCharacter = new PlayerCharacter(character);
+    return this.database.executeSql(CharacterQueries.SELECT_CHARACTER_VARIABLES, [character.id])
+      .then(res => {
+        if (res.rows.length == 0) return;
+
+        let resultRow = res.rows.item(0);
+        playerCharacter.experience = resultRow.experience;
+        playerCharacter.hitPoints = resultRow.hitPoints;
+        playerCharacter.currentHitDie = resultRow.currentHitDie;
+        playerCharacter.classType = resultRow.classType;
+        playerCharacter.backgroundType = resultRow.backgroundType;
+      })
+      .then(() => playerCharacter);
   }
 
   saveCharacter(character: Character): Promise<void> {
     if (character.id) {
       return this.openDatabase
-        .then(() => this.database.executeSql(CharacterQueries.UPDATE_CHARACTER, [character.name, character.maxHealth, character.speed, character.armorClass, character.characterType, character.id]))
+        .then(() => this.saveBasicData(character, false))
         .then(() => this.saveStatistics(character, false))
         .then(() => this.clearSavingThrows(character))
         .then(() => this.createMapping('saving_throw', character.id, character.savingThrows))
         .then(() => this.clearSkills(character))
-        .then(() => this.createMapping('skill', character.id, character.skills));
+        .then(() => this.createMapping('skill', character.id, character.skills))
+        .then(() => this.saveVariables(character, false));
     } else {
       return this.openDatabase
-        .then(() => this.database.executeSql(CharacterQueries.INSERT_CHARACTER, [character.name, character.maxHealth, character.speed, character.armorClass, character.characterType]))
+        .then(() => this.saveBasicData(character, true))
         .then(() => this.saveStatistics(character, true))
         .then(() => this.createMapping('saving_throw', character.id, character.savingThrows))
-        .then(() => this.createMapping('skill', character.id, character.skills));
+        .then(() => this.createMapping('skill', character.id, character.skills))
+        .then(() => this.saveVariables(character, true));
     }
   }
 
-  clearSavingThrows(character: Character): Promise<void> {
+  private clearSavingThrows(character: Character): Promise<void> {
     return this.openDatabase
       .then(() => this.database.executeSql(CharacterQueries.CLEAR_SAVING_THROWS, [character.id]));
   }
 
-  clearSkills(character: Character): Promise<void> {
+  private clearSkills(character: Character): Promise<void> {
     return this.openDatabase
       .then(() => this.database.executeSql(CharacterQueries.CLEAR_SKILLS, [character.id]));
   }
 
-  createMapping(
+  private createMapping(
       tableName: string,
       id: number,
       arr: number[]): Promise<void> {
@@ -138,7 +155,16 @@ export class CharacterProvider {
       .then(() => this.database.executeSql(insertQuery, {}));
   }
 
-  saveStatistics(character: Character, isInsert: boolean): Promise<void> {
+  private saveBasicData(character: Character, isInsert: boolean): Promise<void> {
+    if (isInsert) {
+      return this.database.executeSql(CharacterQueries.INSERT_CHARACTER, [character.name, character.maxHealth, character.speed, character.armorClass, character.characterType])
+        .then((res) => character.id = res.insertId)
+    } else {
+      return this.database.executeSql(CharacterQueries.UPDATE_CHARACTER, [character.name, character.maxHealth, character.speed, character.armorClass, character.characterType, character.id]);
+    }
+  }
+
+  private saveStatistics(character: Character, isInsert: boolean): Promise<void> {
     let values = [];
     if (isInsert) values.push(character.id);
     for (let stat of character.statistics) {
@@ -147,5 +173,17 @@ export class CharacterProvider {
     if (!isInsert) values.push(character.id);
     return this.openDatabase
       .then(() => this.database.executeSql(isInsert ? CharacterQueries.INSERT_STATISTICS : CharacterQueries.UPDATE_STATISTICS, values));
+  }
+
+  private saveVariables(character: Character, isInsert: boolean): Promise<void> {
+    if (!(character instanceof PlayerCharacter)) return Promise.resolve();
+
+    let playerCharacter = character as PlayerCharacter;
+    let values = [];
+    if (isInsert) values.push(character.id);
+    values.push(playerCharacter.experience, playerCharacter.hitPoints, playerCharacter.currentHitDie, playerCharacter.classType, playerCharacter.backgroundType);
+    if (!isInsert) values.push(character.id);
+    return this.openDatabase
+      .then(() => this.database.executeSql(isInsert ? CharacterQueries.INSERT_VARIABLES : CharacterQueries.UPDATE_VARIABLES, values));
   }
 }

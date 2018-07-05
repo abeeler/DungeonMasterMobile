@@ -1,5 +1,3 @@
-import { Health, Combatant } from "./combat";
-
 export class SimpleCharacter {
   constructor(
     public id: number,
@@ -25,7 +23,7 @@ export class Character extends SimpleCharacter {
         maxHealth = 12,
         speed = 30,
         armorClass = 10,
-        proficiencies = [],
+        skills = [],
         characterType = 0
       } = character;
 
@@ -37,7 +35,7 @@ export class Character extends SimpleCharacter {
       this.maxHealth = maxHealth;
       this.speed = speed;
       this.armorClass = armorClass;
-      this.skills = proficiencies;
+      this.skills = skills;
     }
   
     public getModifier?(statIndex: number): number {
@@ -58,6 +56,10 @@ export class Character extends SimpleCharacter {
   
     public get hitDieBonus(): number {
       return this.getModifier(Character.CONSTITUTION);
+    }
+
+    public get isPlayerCharacter(): boolean {
+      return this.characterType === 0;
     }
   
     static readonly STRENGTH = 0;
@@ -104,6 +106,136 @@ export class Character extends SimpleCharacter {
       'Player Character',
       'Non-Player Character',
       'Monster'
+    ];
+  }
+
+  export class PlayerCharacter extends Character {
+    public experience?: number;
+    public hitPoints?: number;
+    public currentHitDie?: number;
+    public classType?: number;
+    public backgroundType: number;
+
+    constructor(character: any = {} as PlayerCharacter) {
+      super(character);
+
+      let {
+        experience = 0,
+        hitPoints = this.maxHealth,
+        currentHitDie = experience,
+        classType = 0,
+        backgroundType = 0
+      } = character;
+
+      this.experience = experience;
+      this.hitPoints = hitPoints;
+      this.currentHitDie = currentHitDie;
+      this.classType = classType;
+      this.backgroundType = backgroundType;
+    }
+
+    get class(): string {
+      return PlayerCharacter.CLASS_NAMES[this.classType];
+    }
+
+    get hitDieType(): number {
+      return PlayerCharacter.CLASS_DIE_TYPES[this.classType];
+    }
+
+    get background(): string {
+      return PlayerCharacter.BACKGROUND_NAMES[this.backgroundType];
+    }
+
+    get level(): number {
+      let level = 1;
+      for (let requiredExperience of PlayerCharacter.REQUIRED_EXPERIENCE) {
+        if (this.experience < requiredExperience) break;
+        level++;
+      }
+      return level;
+    }
+
+    get nextLevelExperience(): number {
+      return PlayerCharacter.REQUIRED_EXPERIENCE[Math.min(this.level - 1, 18)];
+    }
+
+    get proficiencyBonus(): number {
+      switch (true) {
+        case (this.level < 5): return 2;
+        case (this.level < 9): return 3;
+        case (this.level < 13): return 4;
+        case (this.level < 17): return 5;
+        default: return 6;
+      }
+    }
+
+    static readonly CLASS_NAMES: string[] = [
+      'Barbarian',
+      'Bard',
+      'Cleric',
+      'Druid',
+      'Fighter',
+      'Monk',
+      'Paladin',
+      'Ranger',
+      'Rogue',
+      'Sorceror',
+      'Warlock',
+      'Wizard'
+    ];
+
+    static readonly CLASS_DIE_TYPES: number[] = [
+      12,
+      8,
+      8,
+      8,
+      10,
+      8,
+      10,
+      10,
+      8,
+      6,
+      8,
+      6
+    ];
+
+    static readonly BACKGROUND_NAMES: string[] = [
+      'Acolyte',
+      'Charlatan',
+      'Criminal',
+      'Entertainer',
+      'Folk Hero',
+      'Guild Artisan',
+      'Hermit',
+      'Noble',
+      'Outlander',
+      'Sage',
+      'Sailor',
+      'Soldier',
+      'Urchin',
+      'Inquirer'
+    ];
+
+    static readonly REQUIRED_EXPERIENCE: number[] = [
+      300,
+      900,
+      2700,
+      6500,
+      14000,
+      23000,
+      34000,
+      48000,
+      64000,
+      85000,
+      100000,
+      120000,
+      140000,
+      165000,
+      195000,
+      225000,
+      265000,
+      305000,
+      355000
     ];
   }
   

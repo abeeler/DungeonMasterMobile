@@ -17,6 +17,7 @@
     </ion-buttons>
   </ion-navbar>
   <ion-segment [(ngModel)]="section">
+    <ion-segment-button *ngIf="character.isPlayerCharacter" value="general">General</ion-segment-button>
     <ion-segment-button value="stats">Stats</ion-segment-button>
     <ion-segment-button value="combat">Combat</ion-segment-button>
     <ion-segment-button value="skills">Skills</ion-segment-button>
@@ -31,6 +32,25 @@
   </ion-fab>
 
   <div [ngSwitch]="section">
+    <ion-list *ngSwitchCase="'general'">
+      <ion-item>
+        Class
+        <span item-end>{{character.class}}</span>
+      </ion-item>
+      <ion-item>
+        Background
+        <span item-end>{{character.background}}</span>
+      </ion-item>
+      <ion-item>
+        Level
+        <span item-end>{{character.level}}</span>
+      </ion-item>
+      <ion-item margin-bottom>
+        Experience
+        <span item-end>{{character.experience}}/{{character.nextLevelExperience}}</span>
+      </ion-item>
+    </ion-list>
+
     <ion-list *ngSwitchCase="'stats'">
       <ion-item *ngFor="let index of [0,1,2,3,4,5]"
           [ngClass]="savingThrowClass(index)">
@@ -45,16 +65,24 @@
 
     <ion-list *ngSwitchCase="'combat'">
       <ion-item>
+        Armor Class
+        <span item-end>{{character.armorClass}}</span>
+      </ion-item>
+      <ion-item *ngIf="character.isPlayerCharacter">
+        Current Health
+        <span item-end class="health">{{character.hitPoints}}</span>
+      </ion-item>
+      <ion-item>
         Max Health
         <span item-end class="health">{{character.maxHealth}}</span>
+      </ion-item>
+      <ion-item *ngIf="character.isPlayerCharacter">
+        Hit Die
+        <span item-end>{{character.currentHitDie}}/{{character.level}} (d{{character.hitDieType}})</span>
       </ion-item>
       <ion-item>
         Initiative Bonus
         <span item-end>{{character.initiative}}</span>
-      </ion-item>
-      <ion-item>
-        Armor Class
-        <span item-end>{{character.armorClass}}</span>
       </ion-item>
     </ion-list>
 

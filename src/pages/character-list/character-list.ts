@@ -30,7 +30,8 @@ export class CharacterListPage {
 
     this.characters = [];
     this.characterProvider.getSimpleCharacterList()
-        .then(characters => this.characters = characters);
+        .then(characters => this.characters = characters)
+        .catch(e => console.log(JSON.stringify(e)));
   }
 
   get filteredCharacters() {

@@ -11,18 +11,48 @@
   <form>
     <ion-slides>
       <ion-slide>
+        <h4>General</h4>
         <ion-item>
           <ion-label floating>Name</ion-label>
           <ion-input name="name" clearInput [(ngModel)]="character.name"></ion-input>
         </ion-item>
         <ion-item>
-          <ion-select class="fullWidth" text-left name="characterType" [(ngModel)]="character.characterType">
+          <ion-select class="fullWidth" text-left name="characterType" [(ngModel)]="character.characterType" #characterType (ionChange)="typeChange(characterType.value)">
             <ion-option *ngFor="let characterType of characterTypeNames; index as index" [value]="index">
               {{characterType}}
             </ion-option>
           </ion-select>
         </ion-item>
-
+        <ng-template [ngIf]="character.isPlayerCharacter">
+          <ion-item>
+            <ion-select class="fullWidth" text-left name="classType" [(ngModel)]="character.classType">
+              <ion-option *ngFor="let className of classNames; index as index" [value]="index">
+                {{className}}
+              </ion-option>
+            </ion-select>
+          </ion-item>
+          <ion-item>
+            <ion-select class="fullWidth" text-left name="background" [(ngModel)]="character.backgroundType">
+              <ion-option *ngFor="let background of backgroundNames; index as index" [value]="index">
+                {{background}}
+              </ion-option>
+            </ion-select>
+          </ion-item>
+          <ion-item>
+            <ion-label>Experience</ion-label>
+            <ion-input name="experience" [(ngModel)]="character.experience" type="number"></ion-input>
+          </ion-item>
+          <ion-item>
+            <ion-label>Current HP</ion-label>
+            <ion-input name="hitPoints" [(ngModel)]="character.hitPoints" type="number"></ion-input>
+          </ion-item>
+          <ion-item>
+            <ion-label>Current Hit Die</ion-label>
+            <ion-input name="currentHitDie" [(ngModel)]="character.currentHitDie" type="number"></ion-input>
+          </ion-item>
+        </ng-template>
+      </ion-slide>
+      <ion-slide>
         <h4>Statistics</h4>
         <ion-item *ngFor="let index of [0,1,2,3,4,5]">
           <ion-label>

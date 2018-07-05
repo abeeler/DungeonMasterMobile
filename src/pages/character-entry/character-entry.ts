@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { ViewController, AlertController, NavParams } from 'ionic-angular';
 import { CharacterListPage } from '../character-list/character-list';
-import { Character, SimpleCharacter } from '../../classes/character';
+import { Character, SimpleCharacter, PlayerCharacter } from '../../classes/character';
 import { CharacterProvider } from '../../providers/character/character';
 
 @Component({
@@ -17,7 +17,7 @@ export class CharacterEntryModal {
       public params: NavParams,
       public viewCtrl: ViewController,
       public alertCtrl: AlertController) {
-    this.character = new Character();
+    this.character = new PlayerCharacter();
     this.originatingCharacter = params.get(CharacterListPage.CHARACTER_PARAM);
     if (this.originatingCharacter) {
       characterProvider.getCharacterDetails(this.originatingCharacter.id)
@@ -27,8 +27,10 @@ export class CharacterEntryModal {
   }
 
   dismiss() {
-    this.originatingCharacter.name = this.character.name;
-    this.originatingCharacter.characterType = this.character.characterType;
+    if (this.originatingCharacter) {
+      this.originatingCharacter.name = this.character.name;
+      this.originatingCharacter.characterType = this.character.characterType;
+    }
 
     this.characterProvider.saveCharacter(this.character)
       .then(() => this.viewCtrl.dismiss(this.character))
@@ -37,6 +39,14 @@ export class CharacterEntryModal {
 
   get characterTypeNames(): string[] {
     return Character.CHARACTER_TYPES;
+  }
+
+  get classNames(): string[] {
+    return PlayerCharacter.CLASS_NAMES;
+  }
+
+  get backgroundNames(): string[] {
+    return PlayerCharacter.BACKGROUND_NAMES;
   }
 
   get statisticStrings(): string[] {
@@ -55,6 +65,10 @@ export class CharacterEntryModal {
       }
     }
     return inactiveSkills;
+  }
+
+  typeChange(type: number) {
+    console.log(type);
   }
 
   removeSkill(skill: number) {

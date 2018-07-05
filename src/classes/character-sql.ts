@@ -1,6 +1,6 @@
 export class CharacterQueries {
     static readonly DATABASE = {
-        name: 'dnd.db',
+        name: 'characters.db',
         location: 'default'
     };
 
@@ -9,12 +9,15 @@ export class CharacterQueries {
     static readonly SELECT_CHARACTER_STATISTICS = 'SELECT * FROM statistic WHERE characterID = ?';
     static readonly SELECT_CHARACTER_SAVING_THROWS = 'SELECT * FROM saving_throw WHERE characterID = ?';
     static readonly SELECT_CHARACTER_SKILLS = 'SELECT * FROM skill WHERE characterID = ?';
+    static readonly SELECT_CHARACTER_VARIABLES = 'SELECT * FROM variable WHERE characterID = ?';
 
     static readonly INSERT_CHARACTER = 'INSERT INTO character VALUES(NULL,?,?,?,?,?)';
     static readonly INSERT_STATISTICS = 'INSERT INTO statistic VALUES(?,?,?,?,?,?,?)';
+    static readonly INSERT_VARIABLES = 'INSERT INTO variable VALUES(?,?,?,?,?,?)';
 
     static readonly UPDATE_CHARACTER = 'UPDATE character SET name=?, maxHealth=?, speed=?, armorClass=?, characterType=? WHERE id=?';
     static readonly UPDATE_STATISTICS = 'UPDATE statistic SET strength=?, dexterity=?, constitution=?, intelligence=?, wisdom=?, charisma=? WHERE characterID=?';
+    static readonly UPDATE_VARIABLES = 'UPDATE variable SET experience=?, hitPoints=?, currentHitDie=?, classType=?, backgroundType=? WHERE characterID=?';
 
     static readonly CLEAR_SAVING_THROWS = 'DELETE FROM saving_throw WHERE characterID = ?';
     static readonly CLEAR_SKILLS = 'DELETE FROM skill WHERE characterID = ?';
@@ -67,7 +70,8 @@ export class CharacterQueries {
             experience INTEGER,
             hitPoints TINYINT,
             currentHitDie TINYINT,
-            hitDieType TINYINT,
+            classType TINYINT,
+            backgroundType TINYINT,
             FOREIGN KEY(characterID) REFERENCES character(id)
         )
     `
