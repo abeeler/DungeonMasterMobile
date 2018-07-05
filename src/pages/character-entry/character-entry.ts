@@ -14,6 +14,7 @@ export class CharacterEntryModal {
   currentSegment: string;
   originatingCharacter: SimpleCharacter;
   character: Character;
+  fixingSlideIndex: number;
 
   constructor(
       public characterProvider: CharacterProvider,
@@ -21,6 +22,7 @@ export class CharacterEntryModal {
       public viewCtrl: ViewController,
       public alertCtrl: AlertController) {
     this.currentSegment = "0";
+    this.fixingSlideIndex = -1;
     this.character = new PlayerCharacter();
     this.originatingCharacter = params.get(CharacterListPage.CHARACTER_PARAM);
     if (this.originatingCharacter) {
@@ -107,7 +109,24 @@ export class CharacterEntryModal {
     alert.present();
   }
 
+  focusShift(index: number) {
+    if (this.slides.getActiveIndex() == index) return;
+    if (this.fixingSlideIndex > -1) return;
+    this.fixingSlideIndex = index;
+    this.slides.slideTo(3, 1);
+  }
+
   slideChanged() {
+    if (this.fixingSlideIndex == -1) return;
+
+    this.slides.slideTo(this.fixingSlideIndex, 1, false);
+    this.currentSegment = this.fixingSlideIndex + "";
+    this.fixingSlideIndex = -1;
+  }
+
+  slideChanging() {
+    if (this.fixingSlideIndex > -1) return;
+
     let activeIndex = this.slides.getActiveIndex();
     if (activeIndex > 3) return;
     this.currentSegment = activeIndex + "";

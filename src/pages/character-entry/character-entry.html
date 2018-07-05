@@ -15,7 +15,7 @@
 
 <ion-content padding>
   <form>
-    <ion-slides centeredSlides="false" (ionSlideWillChange)="slideChanged()">
+    <ion-slides centeredSlides="false" (ionSlideWillChange)="slideChanging()" (ionSlideDidChange)="slideChanged()">
       <ion-slide>
         <ion-list>
           <ion-item>
@@ -59,7 +59,7 @@
               {{statisticStrings[index]}}
               <span *ngIf="character.hasSavingThrow(index)">(+)</span>
             </ion-label>
-            <ion-input [name]="statisticStrings[index]" [(ngModel)]="character.statistics[index]" type="number"></ion-input>
+            <ion-input [name]="statisticStrings[index]" [(ngModel)]="character.statistics[index]" (ionFocus)="focusShift(1)" type="number"></ion-input>
           </ion-item>
           <button ion-button block margin-top (click)="presentSavingThrowList()">
             Edit Saving Throws
@@ -71,7 +71,7 @@
         <ion-list>
           <ion-item>
             <ion-label>Armor Class</ion-label>
-            <ion-input name="armorClass" [(ngModel)]="character.armorClass" type="number"></ion-input>
+            <ion-input name="armorClass" [(ngModel)]="character.armorClass" (ionFocus)="focusShift(2)" type="number"></ion-input>
           </ion-item>
           <ion-item *ngIf="character.isPlayerCharacter">
             <ion-label>Current HP</ion-label>
