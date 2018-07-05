@@ -77,7 +77,7 @@ export class CombatPage {
       this.groups.push(group);
     }
 
-    this.groupsUpdated();
+    this.groupsUpdated(null);
   }
 
   nextCombatant() {
@@ -113,7 +113,28 @@ export class CombatPage {
     confirmAlert.present();
   }
 
-  groupsUpdated() {
+  groupsUpdated(newMemberIndex: number) {
+    for (let i = 0; i < this.groups.length; i++) {
+      if (this.groups[i].members.length == 0) {
+        if (this.groupIndex > i) {
+          this.groupIndex--;
+          this.memberIndex = 0;
+        }
+        this.groups.splice(i, 1);
+      } else if (this.groupIndex == i){
+        if (this.groups[i].members.length <= this.memberIndex) {
+          this.memberIndex = this.groups[i].members.length - 1;
+        } else if (newMemberIndex) {
+          this.memberIndex = newMemberIndex - 1;
+        }
+      }
+    }
+
+    if (this.groupIndex >= this.groups.length) {
+      this.groupIndex = this.groups.length - 1;
+      this.memberIndex = 0;
+    }
+
     this.storage.set(CombatPage.STORED_GROUP, this.groups);
   }
 

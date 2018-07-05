@@ -29,6 +29,19 @@ export class CombatantGroupComponent {
         }
     }
 
+    removeMember(index: number) {
+        this.group.members.splice(index, 1);
+        if (this.group.members.length == 1) {
+            this.group.members[0].name = this.group.name + " - " + this.group.members[0].name;
+        }
+
+        if (this.active && this.memberIndex > index) {
+            this.updated.emit(this.memberIndex);
+        } else {
+            this.updated.emit();
+        }
+    }
+
     editCombatant(combatant: Combatant) {
         let originalName = combatant.name;
         let originalHealth = combatant.health.current;

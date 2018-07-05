@@ -2,12 +2,18 @@
   {{group.name}}
   <ion-badge item-end color="secondary" margin-right>{{group.initiative}}</ion-badge>
 </ion-item-divider>
-<button ion-item 
-    [attr.padding-left]="isIndividual ? null : ''"
-    *ngFor="let member of group.members; index as index"
-    [ngClass]="memberClasses(index)"
-    (click)="editCombatant(member)">
-  {{member.name}}
-  <ion-badge margin-left color="danger">{{member.health.current}}/{{member.health.max}}</ion-badge>
-  <ion-badge *ngIf="isIndividual" item-end color="secondary">{{group.initiative}}</ion-badge>
-</button>
+<ion-item-sliding *ngFor="let member of group.members; index as index">
+  <button ion-item 
+      [attr.padding-left]="isIndividual ? null : ''"
+      [ngClass]="memberClasses(index)"
+      (click)="editCombatant(member)">
+    {{member.name}}
+    <ion-badge margin-left color="danger">{{member.health.current}}/{{member.health.max}}</ion-badge>
+    <ion-badge *ngIf="isIndividual" item-end color="secondary">{{group.initiative}}</ion-badge>
+  </button>
+  <ion-item-options side="left">
+    <button color="danger" ion-button icon-only (click)="removeMember(index)">
+      <ion-icon name="trash"></ion-icon>
+    </button>
+  </ion-item-options>
+</ion-item-sliding>

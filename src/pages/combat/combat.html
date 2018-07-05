@@ -12,15 +12,17 @@
 </ion-header>
 
 <ion-content padding>
-  <ion-item-group>
-    <combatant-group
-        *ngFor="let group of groups; index as index"
-        [group]="group"
-        [active]="index === groupIndex"
-        [memberIndex]="memberIndex"
-        (updated)="groupsUpdated()">
-    </combatant-group>
-  </ion-item-group>
+  <ion-list>
+    <ion-item-group>
+      <combatant-group
+          *ngFor="let group of groups; index as index"
+          [group]="group"
+          [active]="index === groupIndex"
+          [memberIndex]="memberIndex"
+          (updated)="groupsUpdated($event)">
+      </combatant-group>
+    </ion-item-group>
+  </ion-list>
 </ion-content>
 
 <ion-footer>
